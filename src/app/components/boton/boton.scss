@@ -1,3 +1,5 @@
+@use "sass:color";
+
 .boton {
   display: inline-flex;
   align-items: center;
@@ -26,54 +28,48 @@
   &.primary {
     background-color: #0d6efd;
     color: white;
-
     &:hover:not(:disabled) {
-      background-color: darken(#0d6efd, 10%);
+      background-color: color.adjust(#0d6efd, $lightness: -10%);
     }
   }
 
   &.secondary {
     background-color: #6c757d;
     color: white;
-
     &:hover:not(:disabled) {
-      background-color: darken(#6c757d, 10%);
+      background-color: color.adjust(#6c757d, $lightness: -10%);
     }
   }
 
   &.success {
     background-color: #198754;
     color: white;
-
     &:hover:not(:disabled) {
-      background-color: darken(#198754, 10%);
+      background-color: color.adjust(#198754, $lightness: -10%);
     }
   }
 
   &.danger {
     background-color: #dc3545;
     color: white;
-
     &:hover:not(:disabled) {
-      background-color: darken(#dc3545, 10%);
+      background-color: color.adjust(#dc3545, $lightness: -10%);
     }
   }
 
   &.warning {
     background-color: #ffc107;
     color: #212529;
-
     &:hover:not(:disabled) {
-      background-color: darken(#ffc107, 10%);
+      background-color: color.adjust(#ffc107, $lightness: -10%);
     }
   }
 
   &.info {
     background-color: #0dcaf0;
     color: #212529;
-
     &:hover:not(:disabled) {
-      background-color: darken(#0dcaf0, 10%);
+      background-color: color.adjust(#0dcaf0, $lightness: -10%);
     }
   }
 
@@ -81,18 +77,16 @@
     background-color: #f8f9fa;
     color: #212529;
     border: 1px solid #dee2e6;
-
     &:hover:not(:disabled) {
-      background-color: darken(#f8f9fa, 10%);
+      background-color: color.adjust(#f8f9fa, $lightness: -10%);
     }
   }
 
   &.dark {
     background-color: #212529;
     color: white;
-
     &:hover:not(:disabled) {
-      background-color: lighten(#212529, 10%);
+      background-color: color.adjust(#212529, $lightness: 10%);
     }
   }
 
@@ -101,9 +95,8 @@
     color: #0d6efd;
     text-decoration: underline;
     padding: 0;
-
     &:hover:not(:disabled) {
-      color: darken(#0d6efd, 15%);
+      color: color.adjust(#0d6efd, $lightness: -15%);
     }
   }
 

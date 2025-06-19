@@ -1,9 +1,59 @@
-<header class="bg-black text-white p-4">
-  <nav class="text-center ">
-    <ul>
-      <li><a routerLink="/home">Home</a></li>
-      <li><a routerLink="/login">Login</a></li>
+<header class="gym-header">
+  <div class="container">
+    <div class="header-content">
+      <div class="logo">
+        <a routerLink="/home">
+          <span class="logo-icon"><i class="fas fa-dumbbell"></i></span>
+          <span class="logo-text">PowerFit<span class="highlight">GYM</span></span>
+        </a>
+      </div>
 
-    </ul>
-  </nav>
+      <nav class="main-nav">
+        <ul class="nav-links">
+          <li><a routerLink="/home" class="nav-link">Inicio</a></li>
+          <li><a routerLink="/clases" class="nav-link">Clases</a></li>
+          <li><a routerLink="/entrenadores" class="nav-link">Entrenadores</a></li>
+          <li><a routerLink="/planes" class="nav-link">Planes</a></li>
+          <li><a routerLink="/horarios" class="nav-link">Horarios</a></li>
+          <li><a routerLink="/contacto" class="nav-link">Contacto</a></li>
+        </ul>
+      </nav>
+      <div class="header-actions">
+        <div class="login-btn-wrapper">
+          <app-boton texto="Iniciar Sesión" tipo="light" size="medium" (buttonClick)="navigateTo('/login')"></app-boton>
+        </div>
+        <div class="signup-btn-wrapper">
+          <app-boton texto="Registrarse" tipo="primary" size="medium"
+            (buttonClick)="navigateTo('/registro')"></app-boton>
+        </div>
+        <button class="mobile-menu-btn" (click)="toggleMobileMenu()">
+          <span class="bar"></span>
+          <span class="bar"></span>
+          <span class="bar"></span>
+        </button>
+      </div>
+    </div>
+  </div>
 </header>
+
+<!-- Menú móvil para pantallas pequeñas -->
+<div class="mobile-menu" [class.active]="isMobileMenuOpen">
+  <ul class="mobile-nav-links">
+    <li><a routerLink="/home" (click)="closeMobileMenu()">Inicio</a></li>
+    <li><a routerLink="/clases" (click)="closeMobileMenu()">Clases</a></li>
+    <li><a routerLink="/entrenadores" (click)="closeMobileMenu()">Entrenadores</a></li>
+    <li><a routerLink="/planes" (click)="closeMobileMenu()">Planes</a></li>
+    <li><a routerLink="/horarios" (click)="closeMobileMenu()">Horarios</a></li>
+    <li><a routerLink="/contacto" (click)="closeMobileMenu()">Contacto</a></li>
+    <li class="mobile-auth">
+      <div class="mobile-btn-wrapper">
+        <app-boton texto="Iniciar Sesión" tipo="light" size="medium" [fullWidth]="true"
+          (buttonClick)="navigateToAndClose('/login')"></app-boton>
+      </div>
+      <div class="mobile-btn-wrapper">
+        <app-boton texto="Registrarse" tipo="primary" size="medium" [fullWidth]="true"
+          (buttonClick)="navigateToAndClose('/registro')"></app-boton>
+      </div>
+    </li>
+  </ul>
+</div>

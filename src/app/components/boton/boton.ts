@@ -1,20 +1,28 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { NgIf } from '@angular/common';
 
 @Component({
   selector: 'app-boton',
-  imports: [],
+  imports: [NgIf],
   templateUrl: './boton.html',
   styleUrl: './boton.scss',
+  standalone: true,
 })
 export class Boton {
   @Input() texto: string = '';
   @Input() tipo: string = 'primary';
   @Input() icono: string = '';
   @Input() disabled: boolean = false;
+  @Input() fullWidth: boolean = false;
+  @Input() size: 'small' | 'medium' | 'large' = 'medium';
+
+  @Output() buttonClick = new EventEmitter<void>();
 
   constructor() {}
 
-  onClick() {
-    console.log(`${this.texto} button clicked`);
+  onButtonClick() {
+    if (!this.disabled) {
+      this.buttonClick.emit();
+    }
   }
 }

@@ -1,0 +1,135 @@
+.boton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-weight: 500;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  gap: 8px;
+  font-family: inherit;
+
+  &:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    box-shadow: none;
+  }
+
+  // Tipos de botón
+  &.primary {
+    background-color: #0d6efd;
+    color: white;
+
+    &:hover:not(:disabled) {
+      background-color: darken(#0d6efd, 10%);
+    }
+  }
+
+  &.secondary {
+    background-color: #6c757d;
+    color: white;
+
+    &:hover:not(:disabled) {
+      background-color: darken(#6c757d, 10%);
+    }
+  }
+
+  &.success {
+    background-color: #198754;
+    color: white;
+
+    &:hover:not(:disabled) {
+      background-color: darken(#198754, 10%);
+    }
+  }
+
+  &.danger {
+    background-color: #dc3545;
+    color: white;
+
+    &:hover:not(:disabled) {
+      background-color: darken(#dc3545, 10%);
+    }
+  }
+
+  &.warning {
+    background-color: #ffc107;
+    color: #212529;
+
+    &:hover:not(:disabled) {
+      background-color: darken(#ffc107, 10%);
+    }
+  }
+
+  &.info {
+    background-color: #0dcaf0;
+    color: #212529;
+
+    &:hover:not(:disabled) {
+      background-color: darken(#0dcaf0, 10%);
+    }
+  }
+
+  &.light {
+    background-color: #f8f9fa;
+    color: #212529;
+    border: 1px solid #dee2e6;
+
+    &:hover:not(:disabled) {
+      background-color: darken(#f8f9fa, 10%);
+    }
+  }
+
+  &.dark {
+    background-color: #212529;
+    color: white;
+
+    &:hover:not(:disabled) {
+      background-color: lighten(#212529, 10%);
+    }
+  }
+
+  &.link {
+    background-color: transparent;
+    color: #0d6efd;
+    text-decoration: underline;
+    padding: 0;
+
+    &:hover:not(:disabled) {
+      color: darken(#0d6efd, 15%);
+    }
+  }
+
+  // Tamaños
+  &.small {
+    padding: 4px 8px;
+    font-size: 0.875rem;
+  }
+
+  &.medium {
+    padding: 8px 16px;
+    font-size: 1rem;
+  }
+
+  &.large {
+    padding: 12px 24px;
+    font-size: 1.25rem;
+  }
+
+  // Ancho completo
+  &.full-width {
+    width: 100%;
+  }
+
+  // Estilo para el icono
+  i {
+    font-size: inherit;
+  }
+}

@@ -1,3 +1,245 @@
-<h1 class="text-3xl font-bold underline text-center ">
-  Hello world!
-</h1>
+<main class="gym-home loaded">
+  <!-- Hero Section (sin animaciones) -->
+  <section class="hero-section">
+    <div class="overlay"></div>
+    <div class="hero-content">
+      <h1 class="hero-title">TRANSFORMA TU <span class="highlight">CUERPO</span><br>TRANSFORMA TU <span
+          class="highlight">VIDA</span></h1>
+      <p class="hero-subtitle">Descubre tu mejor versión en PowerFit<span class="highlight">GYM</span></p>
+      <div class="hero-cta">
+        <a href="#" class="primary-btn">COMIENZA HOY</a>
+        <a href="#" class="secondary-btn"><i class="fas fa-play-circle"></i> VER INSTALACIONES</a>
+      </div>
+    </div>
+    <div class="scroll-indicator">
+      <span>Descubre más</span>
+      <i class="fas fa-chevron-down"></i>
+    </div>
+  </section> <!-- Stats Section (sin animaciones) -->
+  <section class="stats-section">
+    <div class="container">
+      <div class="stats-grid">
+        <div class="stat-item" *ngFor="let stat of stats; let i = index">
+          <div class="stat-icon">
+            <i class="fas {{ stat.icon }}"></i>
+          </div>
+          <div class="stat-value">{{ stat.value }}{{ stat.suffix }}</div>
+          <div class="stat-label">{{ stat.label }}</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- About Section -->
+  <section class="about-section">
+    <div class="container">
+      <div class="about-content">
+        <div class="about-text">
+          <h2>ACERCA DE <span class="highlight">NOSOTROS</span></h2>
+          <p class="lead">En PowerFitGYM, nos dedicamos a transformar vidas mediante el entrenamiento de alto
+            rendimiento y un enfoque personalizado.</p>
+          <p>Contamos con las mejores instalaciones, equipos de última generación y entrenadores certificados que te
+            guiarán en cada paso de tu camino hacia una vida más saludable y activa.</p>
+          <ul class="features-list">
+            <li><i class="fas fa-check"></i> Entrenamiento personalizado</li>
+            <li><i class="fas fa-check"></i> Clases grupales dinámicas</li>
+            <li><i class="fas fa-check"></i> Áreas especializadas</li>
+            <li><i class="fas fa-check"></i> Seguimiento nutricional</li>
+          </ul>
+          <a href="#" class="text-btn">CONOCE MÁS <i class="fas fa-long-arrow-alt-right"></i></a>
+        </div>
+        <div class="about-image">
+          <div class="image-frame">
+            <img src="https://images.unsplash.com/photo-1593079831268-3381b0db4a77?auto=format&fit=crop&w=1000"
+              alt="Interior del gimnasio">
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- Classes Section (sin animaciones) -->
+  <section class="classes-section">
+    <div class="container">
+      <h2 class="section-title">NUESTRAS <span class="highlight">CLASES</span></h2>
+      <p class="section-subtitle">Descubre nuestra variedad de clases diseñadas para todos los niveles y objetivos</p>
+
+      <div class="classes-grid">
+        <div class="class-card" *ngFor="let classItem of classes">
+          <div class="class-image">
+            <img [src]="classItem.image" [alt]="classItem.name">
+            <div class="class-overlay">
+              <span class="class-schedule"><i class="fas fa-clock"></i> {{ classItem.schedule }}</span>
+            </div>
+          </div>
+          <div class="class-content">
+            <h3>{{ classItem.name }}</h3>
+            <p>{{ classItem.description }}</p>
+            <a href="#" class="class-btn">INSCRIBIRME</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="view-all">
+        <a href="#" class="outline-btn">VER TODAS LAS CLASES <i class="fas fa-arrow-right"></i></a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Call to Action Banner -->
+  <section class="cta-section">
+    <div class="container">
+      <div class="cta-content">
+        <h2>¿LISTO PARA TRANSFORMAR TU VIDA?</h2>
+        <p>Regístrate hoy y obtén una semana gratuita de prueba</p>
+        <a href="#" class="cta-btn pulse-animation">COMENZAR AHORA</a>
+      </div>
+    </div>
+  </section>
+  <!-- Trainers Section (sin animaciones) -->
+  <section class="trainers-section">
+    <div class="container">
+      <h2 class="section-title">NUESTROS <span class="highlight">ENTRENADORES</span></h2>
+      <p class="section-subtitle">Profesionales certificados para guiarte en tu camino</p>
+
+      <div class="trainers-grid">
+        <div class="trainer-card" *ngFor="let trainer of trainers">
+          <div class="trainer-image">
+            <img [src]="trainer.image" [alt]="trainer.name">
+            <div class="social-links">
+              <a href="#"><i class="fab fa-instagram"></i></a>
+              <a href="#"><i class="fab fa-facebook"></i></a>
+              <a href="#"><i class="fab fa-linkedin"></i></a>
+            </div>
+          </div>
+          <div class="trainer-info">
+            <h3>{{ trainer.name }}</h3>
+            <span>{{ trainer.specialty }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Testimonials Section con slider -->
+  <section class="testimonials-section">
+    <div class="container">
+      <h2 class="section-title">LO QUE DICEN <span class="highlight">NUESTROS CLIENTES</span></h2>
+
+      <div class="testimonial-slider">
+        <div class="testimonial-item">
+          <div class="testimonial-content">
+            <div class="quote-icon"><i class="fas fa-quote-left"></i></div>
+            <p>"PowerFitGYM ha cambiado completamente mi vida. He logrado metas que nunca pensé que alcanzaría y me
+              siento más saludable que nunca."</p>
+            <div class="testimonial-author">
+              <img src="assets/img/testimonial1.jpg" alt="María Rodríguez">
+              <div>
+                <h4>María Rodríguez</h4>
+                <span>Miembro desde 2023</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Membership Section -->
+  <section class="membership-section">
+    <div class="container">
+      <h2 class="section-title">PLANES DE <span class="highlight">MEMBRESÍA</span></h2>
+      <p class="section-subtitle">Elige el plan que mejor se adapte a tus objetivos</p>
+
+      <div class="plans-grid">
+        <div class="plan-card">
+          <div class="plan-header">
+            <h3>BÁSICO</h3>
+            <div class="plan-price">
+              <span class="price">29</span>
+              <span class="currency">€</span>
+              <span class="period">/mes</span>
+            </div>
+            <span class="plan-subtitle">Ideal para principiantes</span>
+          </div>
+          <div class="plan-features">
+            <ul>
+              <li><i class="fas fa-check"></i> Acceso a instalaciones básicas</li>
+              <li><i class="fas fa-check"></i> 2 clases grupales por semana</li>
+              <li><i class="fas fa-check"></i> Evaluación inicial</li>
+              <li class="not-included"><i class="fas fa-times"></i> Entrenador personal</li>
+              <li class="not-included"><i class="fas fa-times"></i> Nutricionista</li>
+            </ul>
+          </div>
+          <div class="plan-footer">
+            <a href="#" class="plan-btn">SELECCIONAR</a>
+          </div>
+        </div>
+
+        <div class="plan-card featured">
+          <div class="plan-badge">POPULAR</div>
+          <div class="plan-header">
+            <h3>PREMIUM</h3>
+            <div class="plan-price">
+              <span class="price">59</span>
+              <span class="currency">€</span>
+              <span class="period">/mes</span>
+            </div>
+            <span class="plan-subtitle">El más elegido</span>
+          </div>
+          <div class="plan-features">
+            <ul>
+              <li><i class="fas fa-check"></i> Acceso completo a instalaciones</li>
+              <li><i class="fas fa-check"></i> Clases grupales ilimitadas</li>
+              <li><i class="fas fa-check"></i> 2 sesiones con entrenador</li>
+              <li><i class="fas fa-check"></i> 1 evaluación nutricional</li>
+              <li class="not-included"><i class="fas fa-times"></i> Entrenamiento personalizado</li>
+            </ul>
+          </div>
+          <div class="plan-footer">
+            <a href="#" class="plan-btn featured-btn">SELECCIONAR</a>
+          </div>
+        </div>
+
+        <div class="plan-card">
+          <div class="plan-header">
+            <h3>ELITE</h3>
+            <div class="plan-price">
+              <span class="price">99</span>
+              <span class="currency">€</span>
+              <span class="period">/mes</span>
+            </div>
+            <span class="plan-subtitle">Resultados garantizados</span>
+          </div>
+          <div class="plan-features">
+            <ul>
+              <li><i class="fas fa-check"></i> Acceso VIP completo</li>
+              <li><i class="fas fa-check"></i> Clases grupales ilimitadas</li>
+              <li><i class="fas fa-check"></i> 8 sesiones con entrenador</li>
+              <li><i class="fas fa-check"></i> Plan nutricional personalizado</li>
+              <li><i class="fas fa-check"></i> Seguimiento semanal</li>
+            </ul>
+          </div>
+          <div class="plan-footer">
+            <a href="#" class="plan-btn">SELECCIONAR</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Newsletter -->
+  <section class="newsletter-section">
+    <div class="container">
+      <div class="newsletter-content">
+        <div class="newsletter-text">
+          <h2>MANTENTE <span class="highlight">INFORMADO</span></h2>
+          <p>Suscríbete para recibir consejos, promociones y novedades</p>
+        </div>
+        <div class="newsletter-form">
+          <input type="email" placeholder="Tu correo electrónico">
+          <button type="submit">SUSCRIBIRME</button>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>

@@ -1,1 +1,45 @@
-<p>footer works!</p>
+<footer>
+  <!-- Newsletter Section como Footer -->
+  <section class="newsletter-section">
+    <div class="container">
+      <div class="newsletter-content">
+        <div class="newsletter-text scroll-animation slide-in-left" appScrollAnimation [animationClass]="'animate'">
+          <h2>MANTENTE <span class="highlight">INFORMADO</span></h2>
+          <p>Suscríbete para recibir consejos, promociones y novedades</p>
+        </div>
+        <div class="newsletter-form scroll-animation slide-in-right" appScrollAnimation [animationClass]="'animate'"
+          [delay]="300">
+          <input type="email" placeholder="Tu correo electrónico">
+          <button type="submit">SUSCRIBIRME</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Información de contacto y copyright -->
+  <div class="footer-bottom">
+    <div class="container">
+      <div class="footer-info">
+        <div class="footer-logo">
+          PowerFit<span class="highlight">GYM</span>
+        </div>
+        <div class="footer-links">
+          <a href="#">Inicio</a>
+          <a href="#">Clases</a>
+          <a href="#">Entrenadores</a>
+          <a href="#">Membresías</a>
+          <a href="#">Contacto</a>
+        </div>
+        <div class="footer-social">
+          <a href="#"><i class="fab fa-facebook-f"></i></a>
+          <a href="#"><i class="fab fa-instagram"></i></a>
+          <a href="#"><i class="fab fa-twitter"></i></a>
+          <a href="#"><i class="fab fa-youtube"></i></a>
+        </div>
+      </div>
+      <div class="footer-copyright">
+        <p>&copy; 2025 PowerFitGYM. Todos los derechos reservados.</p>
+      </div>
+    </div>
+  </div>
+</footer>

@@ -15,11 +15,12 @@
       <span>Descubre más</span>
       <i class="fas fa-chevron-down"></i>
     </div>
-  </section> <!-- Stats Section (sin animaciones) -->
+  </section> <!-- Stats Section -->
   <section class="stats-section">
     <div class="container">
       <div class="stats-grid">
-        <div class="stat-item" *ngFor="let stat of stats; let i = index">
+        <div class="stat-item scroll-animation fade-in-up" *ngFor="let stat of stats; let i = index" appScrollAnimation
+          [animationClass]="'animate'" [delay]="i * 150">
           <div class="stat-icon">
             <i class="fas {{ stat.icon }}"></i>
           </div>
@@ -29,12 +30,11 @@
       </div>
     </div>
   </section>
-
   <!-- About Section -->
   <section class="about-section">
     <div class="container">
       <div class="about-content">
-        <div class="about-text">
+        <div class="about-text scroll-animation slide-in-left" appScrollAnimation [animationClass]="'animate'">
           <h2>ACERCA DE <span class="highlight">NOSOTROS</span></h2>
           <p class="lead">En PowerFitGYM, nos dedicamos a transformar vidas mediante el entrenamiento de alto
             rendimiento y un enfoque personalizado.</p>
@@ -48,7 +48,8 @@
           </ul>
           <a href="#" class="text-btn">CONOCE MÁS <i class="fas fa-long-arrow-alt-right"></i></a>
         </div>
-        <div class="about-image">
+        <div class="about-image scroll-animation slide-in-right" appScrollAnimation [animationClass]="'animate'"
+          [delay]="300">
           <div class="image-frame">
             <img src="https://images.unsplash.com/photo-1593079831268-3381b0db4a77?auto=format&fit=crop&w=1000"
               alt="Interior del gimnasio">
@@ -56,15 +57,20 @@
         </div>
       </div>
     </div>
-  </section>
-  <!-- Classes Section (sin animaciones) -->
+  </section> <!-- Classes Section -->
   <section class="classes-section">
     <div class="container">
-      <h2 class="section-title">NUESTRAS <span class="highlight">CLASES</span></h2>
-      <p class="section-subtitle">Descubre nuestra variedad de clases diseñadas para todos los niveles y objetivos</p>
+      <h2 class="section-title scroll-animation fade-in-up" appScrollAnimation [animationClass]="'animate'">
+        NUESTRAS <span class="highlight">CLASES</span>
+      </h2>
+      <p class="section-subtitle scroll-animation fade-in-up" appScrollAnimation [animationClass]="'animate'"
+        [delay]="150">
+        Descubre nuestra variedad de clases diseñadas para todos los niveles y objetivos
+      </p>
 
       <div class="classes-grid">
-        <div class="class-card" *ngFor="let classItem of classes">
+        <div class="class-card scroll-animation scale-in" *ngFor="let classItem of classes; let i = index"
+          appScrollAnimation [animationClass]="'animate'" [delay]="i * 200">
           <div class="class-image">
             <img [src]="classItem.image" [alt]="classItem.name">
             <div class="class-overlay">
@@ -94,15 +100,20 @@
         <a href="#" class="cta-btn pulse-animation">COMENZAR AHORA</a>
       </div>
     </div>
-  </section>
-  <!-- Trainers Section (sin animaciones) -->
+  </section> <!-- Trainers Section -->
   <section class="trainers-section">
     <div class="container">
-      <h2 class="section-title">NUESTROS <span class="highlight">ENTRENADORES</span></h2>
-      <p class="section-subtitle">Profesionales certificados para guiarte en tu camino</p>
+      <h2 class="section-title scroll-animation fade-in-up" appScrollAnimation [animationClass]="'animate'">
+        NUESTROS <span class="highlight">ENTRENADORES</span>
+      </h2>
+      <p class="section-subtitle scroll-animation fade-in-up" appScrollAnimation [animationClass]="'animate'"
+        [delay]="150">
+        Profesionales certificados para guiarte en tu camino
+      </p>
 
       <div class="trainers-grid">
-        <div class="trainer-card" *ngFor="let trainer of trainers">
+        <div class="trainer-card scroll-animation rotate-in" *ngFor="let trainer of trainers; let i = index"
+          appScrollAnimation [animationClass]="'animate'" [delay]="i * 200">
           <div class="trainer-image">
             <img [src]="trainer.image" [alt]="trainer.name">
             <div class="social-links">
@@ -119,13 +130,15 @@
       </div>
     </div>
   </section>
-
   <!-- Testimonials Section con slider -->
   <section class="testimonials-section">
     <div class="container">
-      <h2 class="section-title">LO QUE DICEN <span class="highlight">NUESTROS CLIENTES</span></h2>
+      <h2 class="section-title scroll-animation fade-in-up" appScrollAnimation [animationClass]="'animate'">
+        LO QUE DICEN <span class="highlight">NUESTROS CLIENTES</span>
+      </h2>
 
-      <div class="testimonial-slider">
+      <div class="testimonial-slider scroll-animation fade-in" appScrollAnimation [animationClass]="'animate'"
+        [delay]="300">
         <div class="testimonial-item">
           <div class="testimonial-content">
             <div class="quote-icon"><i class="fas fa-quote-left"></i></div>
@@ -143,15 +156,20 @@
       </div>
     </div>
   </section>
-
   <!-- Membership Section -->
   <section class="membership-section">
     <div class="container">
-      <h2 class="section-title">PLANES DE <span class="highlight">MEMBRESÍA</span></h2>
-      <p class="section-subtitle">Elige el plan que mejor se adapte a tus objetivos</p>
+      <h2 class="section-title scroll-animation fade-in-up" appScrollAnimation [animationClass]="'animate'">
+        PLANES DE <span class="highlight">MEMBRESÍA</span>
+      </h2>
+      <p class="section-subtitle scroll-animation fade-in-up" appScrollAnimation [animationClass]="'animate'"
+        [delay]="150">
+        Elige el plan que mejor se adapte a tus objetivos
+      </p>
 
       <div class="plans-grid">
-        <div class="plan-card">
+        <div class="plan-card scroll-animation fade-in-up" appScrollAnimation [animationClass]="'animate'"
+          [delay]="250">
           <div class="plan-header">
             <h3>BÁSICO</h3>
             <div class="plan-price">
@@ -174,8 +192,8 @@
             <a href="#" class="plan-btn">SELECCIONAR</a>
           </div>
         </div>
-
-        <div class="plan-card featured">
+        <div class="plan-card featured scroll-animation fade-in-up" appScrollAnimation [animationClass]="'animate'"
+          [delay]="400">
           <div class="plan-badge">POPULAR</div>
           <div class="plan-header">
             <h3>PREMIUM</h3>
@@ -199,8 +217,8 @@
             <a href="#" class="plan-btn featured-btn">SELECCIONAR</a>
           </div>
         </div>
-
-        <div class="plan-card">
+        <div class="plan-card scroll-animation fade-in-up" appScrollAnimation [animationClass]="'animate'"
+          [delay]="550">
           <div class="plan-header">
             <h3>ELITE</h3>
             <div class="plan-price">
@@ -225,21 +243,5 @@
         </div>
       </div>
     </div>
-  </section>
-
-  <!-- Newsletter -->
-  <section class="newsletter-section">
-    <div class="container">
-      <div class="newsletter-content">
-        <div class="newsletter-text">
-          <h2>MANTENTE <span class="highlight">INFORMADO</span></h2>
-          <p>Suscríbete para recibir consejos, promociones y novedades</p>
-        </div>
-        <div class="newsletter-form">
-          <input type="email" placeholder="Tu correo electrónico">
-          <button type="submit">SUSCRIBIRME</button>
-        </div>
-      </div>
-    </div>
-  </section>
+  </section> 
 </main>

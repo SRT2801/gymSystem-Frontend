@@ -1,18 +1,65 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { ScrollAnimationDirective } from '../../directives/scroll-animation.directive';
+import { ScrollAnimationService } from '../../services/scroll-animation.service';
+import {
+  trigger,
+  state,
+  style,
+  animate,
+  transition,
+} from '@angular/animations';
 
 @Component({
   selector: 'app-home',
-  imports: [CommonModule],
+  imports: [CommonModule, ScrollAnimationDirective],
   templateUrl: './home.html',
   styleUrl: './home.scss',
   standalone: true,
+  animations: [
+    trigger('fadeInUp', [
+      transition(':enter', [
+        style({
+          opacity: 0,
+          transform: 'translateY(40px)',
+        }),
+        animate(
+          '600ms ease-out',
+          style({
+            opacity: 1,
+            transform: 'translateY(0)',
+          })
+        ),
+      ]),
+    ]),
+    trigger('fadeIn', [
+      transition(':enter', [
+        style({ opacity: 0 }),
+        animate('700ms ease-out', style({ opacity: 1 })),
+      ]),
+    ]),
+    trigger('scaleIn', [
+      transition(':enter', [
+        style({
+          opacity: 0,
+          transform: 'scale(0.9)',
+        }),
+        animate(
+          '500ms ease-out',
+          style({
+            opacity: 1,
+            transform: 'scale(1)',
+          })
+        ),
+      ]),
+    ]),
+  ],
 })
 export class Home implements OnInit {
-  // Estado básico para la interfaz
+ 
   isLoaded = true;
 
-  // Datos para las secciones
+
   stats = [
     { value: 2500, label: 'Miembros', icon: 'fa-users', suffix: '+' },
     { value: 45, label: 'Clases', icon: 'fa-calendar-check', suffix: '' },
@@ -42,13 +89,7 @@ export class Home implements OnInit {
       description: 'Cardio de alto impacto',
       schedule: 'Lun a Vie 6:00 PM',
     },
-    {
-      name: 'Boxeo',
-      image:
-        'https://images.unsplash.com/photo-1549824506-b7045a1be677?auto=format&fit=crop&w=800',
-      description: 'Técnica y resistencia',
-      schedule: 'Mar, Jue, Sáb 8:00 AM',
-    },
+
   ];
 
   trainers = [
@@ -77,12 +118,13 @@ export class Home implements OnInit {
         'https://images.unsplash.com/photo-1609899537878-88d5ba429bbb?auto=format&fit=crop&w=800',
     },
   ];
-
-  constructor() {
-    console.log('[DEBUG] Inicializando componente Home sin GSAP');
+  constructor(private scrollAnimationService: ScrollAnimationService) {
+    console.log('[DEBUG] Inicializando componente Home');
   }
 
   ngOnInit(): void {
     console.log('[DEBUG] Home inicializado correctamente');
+
+
   }
 }

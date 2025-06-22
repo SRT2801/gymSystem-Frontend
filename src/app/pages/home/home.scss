@@ -25,9 +25,71 @@ $transition: all 0.3s ease;
   }
 }
 
-// Animaciones eliminadas - versión estática
+// Animaciones para scroll
+// Base para elementos animados al hacer scroll
+.scroll-animation {
+  opacity: 0;
+  transition: all 0.8s cubic-bezier(0.2, 1, 0.3, 1);
+}
 
-// Estilos generales (sin animaciones)
+// Animación de fade-in desde abajo
+.fade-in-up {
+  transform: translateY(50px);
+
+  &.animate {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// Animación de fade-in
+.fade-in {
+  &.animate {
+    opacity: 1;
+  }
+}
+
+// Animación de escala
+.scale-in {
+  transform: scale(0.9);
+
+  &.animate {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+// Animación de slide-in desde la izquierda
+.slide-in-left {
+  transform: translateX(-100px);
+
+  &.animate {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+// Animación de slide-in desde la derecha
+.slide-in-right {
+  transform: translateX(100px);
+
+  &.animate {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+// Animación de rotación y escala
+.rotate-in {
+  transform: rotate(-15deg) scale(0.8);
+
+  &.animate {
+    opacity: 1;
+    transform: rotate(0) scale(1);
+  }
+}
+
+// Estilos generales
 .gym-home {
   font-family: "Roboto", sans-serif;
   color: $text-color;
@@ -189,17 +251,13 @@ $transition: all 0.3s ease;
       margin-bottom: 0.5rem;
       opacity: 0.8;
     }
-
-    i {
-      // Sin animación
-    }
   }
 }
 
 // Stats Section
 .stats-section {
-  @include section-padding;
   background-color: $light-color;
+  @include section-padding;
 
   .stats-grid {
     display: grid;
@@ -354,8 +412,8 @@ $transition: all 0.3s ease;
 
 // Classes Section
 .classes-section {
-  @include section-padding;
   background-color: $light-color;
+  @include section-padding;
 
   .classes-grid {
     display: grid;
@@ -614,8 +672,8 @@ $transition: all 0.3s ease;
 
 // Testimonials Section
 .testimonials-section {
-  @include section-padding;
   background-color: #f8f9fa;
+  @include section-padding;
 
   .testimonial-slider {
     max-width: 800px;

@@ -2,6 +2,7 @@ import {
   ApplicationConfig,
   provideBrowserGlobalErrorListeners,
   provideZoneChangeDetection,
+  importProvidersFrom,
 } from '@angular/core';
 import { provideRouter, withViewTransitions } from '@angular/router';
 import {
@@ -22,21 +23,19 @@ export const appConfig: ApplicationConfig = {
       routes,
       withViewTransitions({
         onViewTransitionCreated: () => {
-          // Forzar el scroll al inicio en cada navegación
           window.scrollTo(0, 0);
         },
       })
     ),
-    // Configuración para que todas las solicitudes HTTP envíen cookies
+
     provideHttpClient(
       withInterceptorsFromDi(),
       withXsrfConfiguration({
-        // Protección CSRF (opcional pero recomendado)
         cookieName: 'XSRF-TOKEN',
         headerName: 'X-XSRF-TOKEN',
       })
     ),
-    // Registrando el interceptor para todas las solicitudes HTTP
+
     {
       provide: HTTP_INTERCEPTORS,
       useClass: CredentialsInterceptor,

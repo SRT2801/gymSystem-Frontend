@@ -15,6 +15,7 @@ export class Boton {
   @Input() disabled: boolean = false;
   @Input() fullWidth: boolean = false;
   @Input() size: 'small' | 'medium' | 'large' = 'medium';
+  @Input() isLoading: boolean = false;
 
   @Output() buttonClick = new EventEmitter<void>();
 

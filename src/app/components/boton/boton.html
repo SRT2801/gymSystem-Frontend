@@ -1,8 +1,12 @@
 <button class="boton" [class.primary]="tipo === 'primary'" [class.secondary]="tipo === 'secondary'"
   [class.success]="tipo === 'success'" [class.danger]="tipo === 'danger'" [class.warning]="tipo === 'warning'"
   [class.info]="tipo === 'info'" [class.light]="tipo === 'light'" [class.dark]="tipo === 'dark'"
-  [class.link]="tipo === 'link'" [class.small]="size === 'small'" [class.medium]="size === 'medium'"
-  [class.large]="size === 'large'" [class.full-width]="fullWidth" (click)="onButtonClick()" [disabled]="disabled">
-  <i *ngIf="icono" class="material-icons">{{icono}}</i>
-  <span>{{texto}}</span>
+  [class.link]="tipo === 'link'" [class.gym]="tipo === 'gym'" [class.small]="size === 'small'"
+  [class.medium]="size === 'medium'" [class.large]="size === 'large'" [class.full-width]="fullWidth"
+  [class.pulse]="tipo === 'gym'" (click)="onButtonClick()" [disabled]="disabled || isLoading">
+  <div class="button-content">
+    <i *ngIf="icono && !isLoading" class="material-icons">{{icono}}</i>
+    <span *ngIf="!isLoading">{{texto}}</span>
+    <span *ngIf="isLoading" class="spinner"></span>
+  </div>
 </button>

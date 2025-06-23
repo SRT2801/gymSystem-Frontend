@@ -5,9 +5,8 @@
     <div class="hero-content">
       <h1 class="hero-title">TRANSFORMA TU <span class="highlight">CUERPO</span><br>TRANSFORMA TU <span
           class="highlight">VIDA</span></h1>
-      <p class="hero-subtitle">Descubre tu mejor versión en PowerFit<span class="highlight">GYM</span></p>
-      <div class="hero-cta">
-        <a href="login" class="primary-btn">COMIENZA HOY</a>
+      <p class="hero-subtitle">Descubre tu mejor versión en PowerFit<span class="highlight">GYM</span></p>      <div class="hero-cta">
+        <a routerLink="/login" class="primary-btn">COMIENZA HOY</a>
         <a href="#" class="secondary-btn"><i class="fas fa-play-circle"></i> VER INSTALACIONES</a>
       </div>
     </div>
@@ -46,7 +45,7 @@
             <li><i class="fas fa-check"></i> Áreas especializadas</li>
             <li><i class="fas fa-check"></i> Seguimiento nutricional</li>
           </ul>
-          <a href="#" class="text-btn">CONOCE MÁS <i class="fas fa-long-arrow-alt-right"></i></a>
+          <a routerLink="/about" class="text-btn">CONOCE MÁS <i class="fas fa-long-arrow-alt-right"></i></a>
         </div>
         <div class="about-image scroll-animation slide-in-right" appScrollAnimation [animationClass]="'animate'"
           [delay]="300">
@@ -80,13 +79,11 @@
           <div class="class-content">
             <h3>{{ classItem.name }}</h3>
             <p>{{ classItem.description }}</p>
-            <a href="#" class="class-btn">INSCRIBIRME</a>
+            <a routerLink="/clases" class="class-btn">INSCRIBIRME</a>
           </div>
         </div>
-      </div>
-
-      <div class="view-all">
-        <a href="#" class="outline-btn">VER TODAS LAS CLASES <i class="fas fa-arrow-right"></i></a>
+      </div>      <div class="view-all">
+        <a routerLink="/clases" class="outline-btn">VER TODAS LAS CLASES <i class="fas fa-arrow-right"></i></a>
       </div>
     </div>
   </section>
@@ -97,7 +94,7 @@
       <div class="cta-content">
         <h2>¿LISTO PARA TRANSFORMAR TU VIDA?</h2>
         <p>Regístrate hoy y obtén una semana gratuita de prueba</p>
-        <a href="#" class="cta-btn pulse-animation">COMENZAR AHORA</a>
+        <a routerLink="/register" class="cta-btn pulse-animation">COMENZAR AHORA</a>
       </div>
     </div>
   </section> <!-- Trainers Section -->

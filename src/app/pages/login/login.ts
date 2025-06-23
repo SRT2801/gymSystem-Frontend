@@ -28,17 +28,21 @@ export class Login implements AfterViewInit {
     private router: Router,
     private authService: AuthService
   ) {
+    if (this.authService.isAuthenticated()) {
+      this.router.navigate(['/home']);
+    }
+
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.minLength(6)]],
+      password: ['', [Validators.required]],
     });
   }
+
   onSubmit() {
     if (this.loginForm.valid) {
       this.isLoading = true;
       this.loginError = null;
 
-      // Conectamos con nuestro backend real
       const credentials = {
         email: this.loginForm.value.email,
         password: this.loginForm.value.password,
@@ -46,14 +50,14 @@ export class Login implements AfterViewInit {
       this.authService.login(credentials).subscribe({
         next: (response) => {
           this.isLoading = false;
-          // Login exitoso, redirigir a la página principal y asegurar que se vaya al inicio
+
           this.router.navigate(['/home']).then(() => {
-            window.scrollTo(0, 0); // Scroll automático al inicio de la página
+            window.scrollTo(0, 0);
           });
         },
         error: (err) => {
           this.isLoading = false;
-          // Manejar diferentes tipos de errores
+
           if (err.status === 401) {
             this.loginError = 'Credenciales incorrectas. Inténtalo de nuevo.';
           } else if (err.status === 0) {
@@ -66,7 +70,6 @@ export class Login implements AfterViewInit {
         },
       });
     } else {
-      // Marcar todos los campos como tocados para mostrar errores de validación
       Object.keys(this.loginForm.controls).forEach((key) => {
         this.loginForm.get(key)?.markAsTouched();
       });
@@ -93,28 +96,21 @@ export class Login implements AfterViewInit {
       if (control.hasError('required')) {
         return 'La contraseña es obligatoria';
       }
-      if (control.hasError('minlength')) {
-        return 'La contraseña debe tener al menos 6 caracteres';
-      }
     }
 
     return '';
   }
 
   ngAfterViewInit(): void {
-    // Activar las animaciones manualmente con un pequeño retraso para que el DOM esté listo
     setTimeout(() => {
-      // Animar el header
       const header = document.querySelector('.login-header');
       if (header) header.classList.add('animate');
 
-      // Animar la tarjeta principal
       setTimeout(() => {
         const card = document.querySelector('.login-card');
         if (card) card.classList.add('animate');
       }, 200);
 
-      // Animar el resto de elementos con incrementos de tiempo
       const animateWithDelay = (selector: string, delay: number) => {
         setTimeout(() => {
           const element = document.querySelector(selector);
@@ -122,7 +118,6 @@ export class Login implements AfterViewInit {
         }, delay);
       };
 
-      // Animar los campos del formulario y botones
       animateWithDelay('.slide-in-left', 400);
       animateWithDelay('.slide-in-right', 600);
       animateWithDelay('.form-options', 800);

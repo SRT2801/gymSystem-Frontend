@@ -19,13 +19,28 @@
         </ul>
       </nav>
       <div class="header-actions">
-        <div class="login-btn-wrapper">
-          <app-boton texto="Iniciar Sesión" tipo="light" size="medium" (buttonClick)="navigateTo('/login')"></app-boton>
-        </div>
-        <div class="signup-btn-wrapper">
-          <app-boton texto="Registrarse" tipo="primary" size="medium"
-            (buttonClick)="navigateTo('/register')"></app-boton>
-        </div>
+        <!-- Mostrar cuando el usuario NO está autenticado -->
+        <ng-container *ngIf="!isAuthenticated">
+          <div class="login-btn-wrapper">
+            <app-boton texto="Iniciar Sesión" tipo="light" size="medium"
+              (buttonClick)="navigateTo('/login')"></app-boton>
+          </div>
+          <div class="signup-btn-wrapper">
+            <app-boton texto="Registrarse" tipo="primary" size="medium"
+              (buttonClick)="navigateTo('/register')"></app-boton>
+          </div>
+        </ng-container>
+
+        <!-- Mostrar cuando el usuario SÍ está autenticado -->
+        <ng-container *ngIf="isAuthenticated">
+          <div class="user-welcome">
+            Hola, {{userName}}
+          </div>
+          <div class="logout-btn-wrapper">
+            <app-boton texto="Cerrar Sesión" tipo="light" size="medium" (buttonClick)="logout()"></app-boton>
+          </div>
+        </ng-container>
+
         <button class="mobile-menu-btn" (click)="toggleMobileMenu()">
           <span class="bar"></span>
           <span class="bar"></span>
@@ -45,7 +60,9 @@
     <li><a routerLink="/planes" (click)="closeMobileMenu()">Planes</a></li>
     <li><a routerLink="/horarios" (click)="closeMobileMenu()">Horarios</a></li>
     <li><a routerLink="/contacto" (click)="closeMobileMenu()">Contacto</a></li>
-    <li class="mobile-auth">
+
+    <!-- Opciones para usuarios NO autenticados -->
+    <li class="mobile-auth" *ngIf="!isAuthenticated">
       <div class="mobile-btn-wrapper">
         <app-boton texto="Iniciar Sesión" tipo="light" size="medium" [fullWidth]="true"
           (buttonClick)="navigateToAndClose('/login')"></app-boton>
@@ -53,6 +70,17 @@
       <div class="mobile-btn-wrapper">
         <app-boton texto="Registrarse" tipo="primary" size="medium" [fullWidth]="true"
           (buttonClick)="navigateToAndClose('/register')"></app-boton>
+      </div>
+    </li>
+
+    <!-- Opciones para usuarios autenticados -->
+    <li class="mobile-auth" *ngIf="isAuthenticated">
+      <div class="user-welcome-mobile">
+        Hola, {{userName}}
+      </div>
+      <div class="mobile-btn-wrapper">
+        <app-boton texto="Cerrar Sesión" tipo="light" size="medium" [fullWidth]="true"
+          (buttonClick)="logout()"></app-boton>
       </div>
     </li>
   </ul>

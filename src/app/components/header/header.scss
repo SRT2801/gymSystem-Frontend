@@ -147,6 +147,54 @@ $transition-speed: 0.3s;
         border-radius: 3px;
         transition: all $transition-speed ease;
       }
+    } // Estilos para el saludo del usuario
+    .user-welcome {
+      font-weight: 600;
+      margin-right: 1rem;
+      color: $text-color;
+      font-size: 1rem;
+      padding: 0.5rem 0.8rem;
+      background-color: rgba(255, 77, 48, 0.2);
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+
+      &::before {
+        content: "\f007"; // Icono de usuario de Font Awesome
+        font-family: "Font Awesome 5 Free";
+        margin-right: 0.5rem;
+      }
+
+      @media (max-width: 768px) {
+        display: none;
+      }
+    }
+
+    .user-welcome-mobile {
+      display: none;
+      font-weight: 600;
+      color: $text-color;
+      text-align: center;
+      margin-bottom: 1rem;
+      font-size: 1.1rem;
+      padding: 0.5rem;
+      background-color: rgba(255, 77, 48, 0.2);
+      border-radius: 4px;
+
+      &::before {
+        content: "\f007"; // Icono de usuario de Font Awesome
+        font-family: "Font Awesome 5 Free";
+        margin-right: 0.5rem;
+      }
+
+      @media (max-width: 768px) {
+        display: block;
+      }
+    }
+
+    // Estilo para el botón de logout
+    .logout-btn-wrapper {
+      margin-left: 0.5rem;
     }
   }
 }

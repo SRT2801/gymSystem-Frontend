@@ -1,7 +1,13 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, BehaviorSubject } from 'rxjs';
-import { tap } from 'rxjs/operators';
+import {
+  Observable,
+  BehaviorSubject,
+  of,
+  throwError,
+  ReplaySubject,
+} from 'rxjs';
+import { tap, catchError, finalize, share } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
 
 export interface LoginRequest {
@@ -20,12 +26,11 @@ export interface RegisterRequest {
 }
 
 export interface AuthResponse {
-  token: string;
   user: {
     id: number;
     name: string;
     email: string;
-    // Puedes añadir más campos según la respuesta de tu backend
+    role: string;
   };
 }
 
@@ -34,8 +39,13 @@ export interface AuthResponse {
 })
 export class AuthService {
   private readonly API_URL = environment.apiUrl;
-  private readonly TOKEN_KEY = environment.tokenKey;
   private readonly USER_KEY = environment.userKey;
+
+  // Bandera para evitar actualizaciones innecesarias
+  private sessionCheckInProgress = false;
+
+  // Para almacenar la llamada a checkSession en curso
+  private sessionCheckObs: Observable<any> | null = null;
 
   // BehaviorSubject para manejar el estado de autenticación
   private authStateSubject = new BehaviorSubject<boolean>(false);
@@ -46,66 +56,88 @@ export class AuthService {
   public currentUser$ = this.currentUserSubject.asObservable();
 
   constructor(private http: HttpClient) {
-    // En un enfoque basado en cookies, debemos verificar la sesión con el backend
-    // al inicializar el servicio
-    // Nota: Este código está restaurado a su versión original
+    this.loadUserFromLocalStorage();
+
+    this.verifySessionWithBackend();
+  }
+
+  private verifySessionWithBackend(): void {
+    if (this.sessionCheckInProgress) return;
+
+    this.sessionCheckInProgress = true;
+
     this.checkSession().subscribe({
-      next: () => {
-        // La sesión está activa en el backend
+      next: (user) => {
+        if (user && user.name && user.id) {
+          localStorage.setItem(this.USER_KEY, JSON.stringify(user));
+          this.setCurrentUser(user);
+        }
       },
-      error: () => {
-        // Si falla, intentamos cargar datos del usuario desde localStorage
-        // solo para mantener la UI actualizada hasta que se pueda verificar con el backend
-        this.loadUserFromLocalStorage();
+      error: (err) => {
+        if (err.status === 401 || err.status === 403) {
+          this.clearUserData();
+        }
+      },
+      complete: () => {
+        this.sessionCheckInProgress = false;
+        this.sessionCheckObs = null;
       },
     });
   }
 
-  // Cargar datos del usuario desde localStorage (solo para UI)
   private loadUserFromLocalStorage(): void {
-    const storedUser = localStorage.getItem(this.USER_KEY);
-
-    if (storedUser) {
-      try {
+    try {
+      const storedUser = localStorage.getItem(this.USER_KEY);
+      if (storedUser) {
         const user = JSON.parse(storedUser);
-        this.setCurrentUser(user);
-      } catch (e) {
-        localStorage.removeItem(this.USER_KEY);
-        this.setCurrentUser(null);
+        if (user && user.name) {
+          this.setCurrentUser(user);
+        }
       }
+    } catch (error) {
+      this.clearUserData();
     }
   }
 
+  /**
+   * Inicia sesión en el sistema
+   * El backend establece la cookie HTTP-only automáticamente
+   */
   login(credentials: LoginRequest): Observable<AuthResponse> {
     return this.http
       .post<AuthResponse>(`${this.API_URL}/auth/login`, credentials)
       .pipe(
         tap((response) => {
-          // En un enfoque basado en cookies, solo guardamos el usuario en localStorage
-          // para mantener la UI actualizada, pero la autenticación real se maneja con cookies
-          localStorage.setItem(this.USER_KEY, JSON.stringify(response.user));
-          this.setCurrentUser(response.user);
+          if (response && response.user) {
+            localStorage.setItem(this.USER_KEY, JSON.stringify(response.user));
+            this.setCurrentUser(response.user);
+          }
         })
       );
   }
 
+  /**
+   * Registra un nuevo usuario en el sistema
+   * El backend establece la cookie HTTP-only automáticamente
+   */
   register(userData: RegisterRequest): Observable<AuthResponse> {
     return this.http
       .post<AuthResponse>(`${this.API_URL}/auth/register`, userData)
       .pipe(
         tap((response) => {
-          // En un enfoque basado en cookies, solo guardamos el usuario en localStorage
-          // para mantener la UI actualizada
-          localStorage.setItem(this.USER_KEY, JSON.stringify(response.user));
-          this.setCurrentUser(response.user);
+          if (response && response.user) {
+            localStorage.setItem(this.USER_KEY, JSON.stringify(response.user));
+            this.setCurrentUser(response.user);
+          }
         })
       );
   }
 
-  // Actualiza el estado de autenticación y la información del usuario
   private setCurrentUser(user: any): void {
+    if (!user) return;
+
     this.currentUserSubject.next(user);
-    this.authStateSubject.next(!!user);
+    this.authStateSubject.next(true);
   }
 
   // Obtener la información del usuario logueado
@@ -113,33 +145,52 @@ export class AuthService {
     return this.currentUserSubject.getValue();
   }
 
-  // Verificar si hay una sesión activa
   checkSession(): Observable<any> {
-    return this.http.get<any>(`${this.API_URL}/auth/me`).pipe(
+    if (this.sessionCheckObs) {
+      return this.sessionCheckObs;
+    }
+
+    this.sessionCheckObs = this.http.get<any>(`${this.API_URL}/auth/me`).pipe(
       tap((user) => {
-        // Guardar los datos del usuario en localStorage para mantener la UI actualizada
-        // cuando se recargue la página
-        if (user) {
+        if (user && user.name) {
           localStorage.setItem(this.USER_KEY, JSON.stringify(user));
+          this.setCurrentUser(user);
         }
-        this.setCurrentUser(user);
-      })
+      }),
+      catchError((error) => {
+        if (error.status === 401 || error.status === 403) {
+          this.clearUserData();
+        }
+        return throwError(() => error);
+      }),
+      finalize(() => {
+        this.sessionCheckInProgress = false;
+        this.sessionCheckObs = null;
+      }),
+      share()
     );
+
+    return this.sessionCheckObs;
   }
 
-  // Comprobar si el usuario está autenticado
   isAuthenticated(): boolean {
     return !!this.currentUserSubject.getValue();
   }
 
-  // Cerrar sesión
+  private clearUserData(): void {
+    localStorage.removeItem(this.USER_KEY);
+    this.currentUserSubject.next(null);
+    this.authStateSubject.next(false);
+  }
+
   logout(): Observable<any> {
     return this.http.post<any>(`${this.API_URL}/auth/logout`, {}).pipe(
       tap(() => {
-        // Limpiar datos de localStorage (solo para UI)
-        localStorage.removeItem(this.USER_KEY);
-        // Actualizar estado
-        this.setCurrentUser(null);
+        this.clearUserData();
+      }),
+      catchError((error) => {
+        this.clearUserData();
+        return of({ success: true });
       })
     );
   }

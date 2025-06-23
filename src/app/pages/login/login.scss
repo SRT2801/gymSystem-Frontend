@@ -1,0 +1,493 @@
+@use "sass:color";
+
+// Variables (basadas en las de home.scss)
+$primary-color: #ff4d30;
+$secondary-color: #212529;
+$light-color: #f8f9fa;
+$dark-color: #121212;
+$gray-color: #6c757d;
+$text-color: #333;
+$border-radius: 8px;
+$transition: all 0.3s ease;
+
+// Estilos del login
+.login-container {
+  min-height: 100vh;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  background-size: cover;
+  background-position: center;
+  padding: 2rem;
+
+  // Overlay con efecto oscuro
+  .overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(
+      135deg,
+      rgba(0, 0, 0, 0.8) 0%,
+      rgba(33, 37, 41, 0.9) 100%
+    );
+    z-index: 1;
+  }
+
+  // Todos los elementos deben estar sobre el overlay
+  .login-header,
+  .login-card,
+  .login-footer {
+    position: relative;
+    z-index: 2;
+  }
+}
+
+// Encabezado del login
+.login-header {
+  text-align: center;
+  margin-bottom: 2rem;
+  color: $light-color;
+
+  .logo {
+    font-size: 3rem;
+    font-weight: 800;
+    margin-bottom: 0.5rem;
+    letter-spacing: -1px;
+    text-transform: uppercase;
+
+    .highlight {
+      color: $primary-color;
+    }
+  }
+
+  .tagline {
+    font-size: 1.2rem;
+    opacity: 0.8;
+    font-weight: 300;
+    letter-spacing: 0.5px;
+  }
+}
+
+// Tarjeta de login
+.login-card {
+  width: 100%;
+  max-width: 450px;
+  background-color: rgba(255, 255, 255, 0.95);
+  border-radius: $border-radius;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+  transition: $transition;
+
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+  }
+
+  .login-card-inner {
+    padding: 2.5rem;
+
+    h2 {
+      font-size: 1.8rem;
+      font-weight: 700;
+      text-align: center;
+      margin-bottom: 2rem;
+      color: $secondary-color;
+      position: relative;
+
+      &:after {
+        content: "";
+        display: block;
+        width: 60px;
+        height: 4px;
+        background: $primary-color;
+        margin: 0.7rem auto 0;
+        border-radius: 2px;
+      }
+    }
+  }
+}
+
+// Formulario
+.login-form {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+
+  @media (min-width: 768px) {
+    grid-template-columns: 1fr; // Una columna en este caso
+    column-gap: 1.5rem;
+  }
+
+  // Elementos que deben ocupar todo el ancho
+  .login-error,
+  .form-submit,
+  .additional-links,
+  .form-options {
+    grid-column: 1 / -1;
+  }
+
+  .full-width {
+    width: 100%;
+  }
+
+  .form-group {
+    margin-bottom: 1.5rem;
+
+    label {
+      display: block;
+      font-weight: 500;
+      margin-bottom: 0.5rem;
+      color: $secondary-color;
+      font-size: 0.95rem;
+    }
+
+    .input-wrapper {
+      position: relative;
+
+      i {
+        position: absolute;
+        top: 50%;
+        left: 1rem;
+        transform: translateY(-50%);
+        color: $gray-color;
+      }
+
+      input {
+        width: 100%;
+        padding: 1rem 1rem 1rem 3rem;
+        border: 1px solid #ddd;
+        border-radius: $border-radius;
+        font-size: 1rem;
+        transition: $transition;
+
+        &:focus {
+          outline: none;
+          border-color: $primary-color;
+          box-shadow: 0 0 0 3px rgba($primary-color, 0.2);
+        }
+
+        &.is-invalid {
+          border-color: crimson;
+          box-shadow: 0 0 0 3px rgba(crimson, 0.2);
+        }
+
+        &::placeholder {
+          color: #aaa;
+        }
+      }
+    }
+
+    .error-message {
+      color: crimson;
+      font-size: 0.85rem;
+      margin-top: 0.5rem;
+    }
+  }
+  .form-options {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    .remember-me {
+      display: flex;
+      align-items: center;
+
+      input[type="checkbox"] {
+        margin-right: 8px;
+        accent-color: $primary-color;
+        cursor: pointer;
+        width: 16px;
+        height: 16px;
+      }
+
+      label {
+        font-size: 0.9rem;
+        color: $gray-color;
+        cursor: pointer;
+      }
+
+      @media (max-width: 480px) {
+        label {
+          font-size: 0.85rem;
+        }
+      }
+    }
+    .forgot-password {
+      font-size: 0.9rem;
+      color: $primary-color;
+      text-decoration: none;
+      transition: $transition;
+
+      &:hover {
+        text-decoration: underline;
+        color: darken($primary-color, 10%);
+      }
+    }
+
+    // Responsive para dispositivos móviles
+    @media (max-width: 480px) {
+      flex-direction: column;
+      align-items: flex-start;
+
+      .remember-me {
+        margin-bottom: 1rem;
+      }
+
+      .forgot-password {
+        align-self: flex-start;
+        margin-bottom: 0.5rem;
+        font-size: 0.9rem;
+        padding: 0.3rem 0;
+        position: relative;
+
+        &::after {
+          content: "";
+          position: absolute;
+          bottom: 0;
+          left: 0;
+          width: 100%;
+          height: 1px;
+          background-color: rgba($primary-color, 0.3);
+        }
+
+        &:hover::after {
+          background-color: $primary-color;
+        }
+      }
+    }
+  }
+  .login-error {
+    background-color: rgba(crimson, 0.1);
+    color: crimson;
+    padding: 0.8rem 1rem;
+    border-radius: $border-radius;
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+
+    i {
+      margin-right: 0.5rem;
+      font-size: 1.1rem;
+    }
+
+    @media (max-width: 480px) {
+      padding: 0.7rem 0.8rem;
+      font-size: 0.85rem;
+
+      i {
+        font-size: 1rem;
+      }
+    }
+  }
+  .form-submit {
+    margin-top: 2rem;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+
+    &.animate {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    &.full-width {
+      width: 100%;
+    }
+
+    app-boton {
+      animation: fadeInUp 0.6s ease forwards;
+      animation-delay: 0.3s;
+      opacity: 0;
+    }
+  }
+}
+.additional-links {
+  text-align: center;
+
+  &.full-width {
+    width: 100%;
+  }
+
+  p {
+    color: $gray-color;
+    font-size: 0.95rem;
+
+    a {
+      color: $primary-color;
+      text-decoration: none;
+      font-weight: 500;
+      transition: $transition;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+}
+
+// Elementos que deben ocupar todo el ancho
+.login-error,
+.form-submit,
+.additional-links {
+  grid-column: 1 / -1;
+}
+
+.full-width {
+  width: 100%; // Asegurar ancho completo
+}
+
+// Estado inicial para todos los elementos con animaciones
+.login-header,
+.login-card,
+.slide-in-left,
+.slide-in-right,
+.form-options,
+.form-submit,
+.additional-links,
+.login-footer {
+  opacity: 0;
+  transition: all 0.8s cubic-bezier(0.2, 1, 0.3, 1);
+}
+
+.fade-in-up {
+  transform: translateY(50px);
+
+  &.animate {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-in,
+.login-header,
+.form-options,
+.additional-links,
+.login-footer {
+  &.animate {
+    opacity: 1;
+  }
+}
+
+.scale-in,
+.login-card {
+  transform: scale(0.9);
+
+  &.animate {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.slide-in-left {
+  transform: translateX(-50px);
+
+  &.animate {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.slide-in-right {
+  transform: translateX(50px);
+
+  &.animate {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+// Animaciones de entrada
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// Responsive
+@media (max-width: 768px) {
+  .login-card {
+    max-width: 92%;
+    margin: 0 auto;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+
+    &:hover {
+      transform: none; // Desactivar el efecto hover en móviles
+    }
+  }
+
+  .login-card-inner {
+    padding: 1.5rem;
+  }
+
+  .login-header {
+    margin-bottom: 1.5rem;
+
+    .logo {
+      font-size: 2.5rem;
+    }
+  }
+
+  .form-group {
+    margin-bottom: 1.2rem;
+
+    .input-wrapper input {
+      padding: 0.8rem 0.8rem 0.8rem 2.8rem;
+    }
+  }
+
+  .form-submit .login-btn {
+    padding: 0.8rem;
+  }
+}
+
+// Ajustes específicos para móviles más pequeños
+@media (max-width: 480px) {
+  .login-card-inner {
+    padding: 1.2rem;
+  }
+
+  .login-card-inner h2 {
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .form-group label {
+    font-size: 0.9rem;
+  }
+
+  .form-group .input-wrapper i {
+    left: 0.8rem;
+  }
+
+  .additional-links p {
+    font-size: 0.9rem;
+  }
+
+  .login-header .logo {
+    font-size: 2rem;
+  }
+
+  .login-header .tagline {
+    font-size: 1rem;
+  }
+}
+
+// Comentamos estas reglas ya que ahora usamos el componente de botón reutilizable
+// body
+//   .login-container
+//   .login-card
+//   .login-card-inner
+//   .form-submit
+//   .login-btn {
+//   // Estilos del botón aquí...
+// }

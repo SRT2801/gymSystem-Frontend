@@ -9,11 +9,12 @@ import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
+import { Boton } from '../../components/boton/boton';
 
 @Component({
   selector: 'app-register',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, RouterModule],
+  imports: [CommonModule, ReactiveFormsModule, RouterModule, Boton],
   templateUrl: './register.html',
   styleUrl: './register.scss',
 })
@@ -73,15 +74,14 @@ export class Register implements AfterViewInit {
         documentId: this.registerForm.value.documentId,
         birthDate: this.registerForm.value.birthDate,
       };
-
       this.authService.register(userData).subscribe({
         next: (response) => {
           this.isLoading = false;
-          this.registerSuccess = true;
-
-          // Redirección automática después de un registro exitoso
+          this.registerSuccess = true; // Redirección automática después de un registro exitoso
           setTimeout(() => {
-            this.router.navigate(['/home']);
+            this.router.navigate(['/home']).then(() => {
+              window.scrollTo(0, 0); // Scroll automático al inicio de la página
+            });
           }, 2000);
         },
         error: (err) => {
@@ -182,15 +182,15 @@ export class Register implements AfterViewInit {
       setTimeout(() => {
         const card = document.querySelector('.register-card');
         if (card) card.classList.add('animate');
-      }, 200);      // Animar los campos del formulario en orden por filas (respetando el layout de dos columnas)
+      }, 200); // Animar los campos del formulario en orden por filas (respetando el layout de dos columnas)
       const formGroups = document.querySelectorAll('.form-group');
       const totalRows = Math.ceil(formGroups.length / 2); // Número de filas (2 columnas)
-      
+
       formGroups.forEach((element, index) => {
         // Calcular la fila y la columna para animar en el orden correcto
         const row = Math.floor(index / 2);
-        const delay = 400 + (row * 150); // Incremento por fila, no por elemento individual
-        
+        const delay = 400 + row * 150; // Incremento por fila, no por elemento individual
+
         setTimeout(() => {
           element.classList.add('animate');
         }, delay);

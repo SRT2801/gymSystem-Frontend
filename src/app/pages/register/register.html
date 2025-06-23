@@ -12,7 +12,7 @@
     <div class="register-card-inner">
       <h2>Crear Cuenta</h2>
 
-      <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="register-form">        <!-- Mensaje de éxito -->
+      <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="register-form"> <!-- Mensaje de éxito -->
         <div class="success-message full-width" *ngIf="registerSuccess">
           <i class="fas fa-check-circle"></i>
           ¡Registro exitoso! Serás redirigido automáticamente...
@@ -110,18 +110,16 @@
             *ngIf="registerForm.get('birthDate')?.invalid && registerForm.get('birthDate')?.touched">
             {{ getErrorMessage('birthDate') }}
           </div>
-        </div>        <!-- Mensaje de error de registro -->
+        </div> <!-- Mensaje de error de registro -->
         <div class="register-error full-width" *ngIf="registerError">
           <i class="fas fa-exclamation-circle"></i>
           {{ registerError }}
-        </div>
-
-        <!-- Botón de registro -->
+        </div> <!-- Botón de registro -->
         <div class="form-submit full-width">
-          <button type="submit" class="register-btn" [disabled]="isLoading || registerSuccess">
-            <span *ngIf="!isLoading">CREAR CUENTA</span>
-            <span *ngIf="isLoading" class="spinner"></span>
-          </button>
+          <app-boton texto="CREAR CUENTA" tipo="gym" size="large" [fullWidth]="true"
+            [disabled]="registerForm.invalid || isLoading || registerSuccess" [isLoading]="isLoading"
+            (buttonClick)="onSubmit()">
+          </app-boton>
         </div>
 
         <!-- Links adicionales -->

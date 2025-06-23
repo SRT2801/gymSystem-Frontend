@@ -8,11 +8,12 @@ import {
 import { Observable } from 'rxjs';
 
 @Injectable()
-export class CredentialsInterceptor implements HttpInterceptor {  intercept(
+export class CredentialsInterceptor implements HttpInterceptor {
+  intercept(
     req: HttpRequest<any>,
     next: HttpHandler
   ): Observable<HttpEvent<any>> {
-    // Para un enfoque basado en cookies, simplemente aseguramos 
+    // Para un enfoque basado en cookies, simplemente aseguramos
     // que withCredentials esté habilitado para todas las solicitudes
     const authReq = req.clone({
       withCredentials: true,

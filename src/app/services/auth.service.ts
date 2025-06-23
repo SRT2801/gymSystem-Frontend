@@ -60,11 +60,11 @@ export class AuthService {
       },
     });
   }
-  
+
   // Cargar datos del usuario desde localStorage (solo para UI)
   private loadUserFromLocalStorage(): void {
     const storedUser = localStorage.getItem(this.USER_KEY);
-    
+
     if (storedUser) {
       try {
         const user = JSON.parse(storedUser);
@@ -79,25 +79,29 @@ export class AuthService {
   login(credentials: LoginRequest): Observable<AuthResponse> {
     return this.http
       .post<AuthResponse>(`${this.API_URL}/auth/login`, credentials)
-      .pipe(tap((response) => {
-        // En un enfoque basado en cookies, solo guardamos el usuario en localStorage
-        // para mantener la UI actualizada, pero la autenticación real se maneja con cookies
-        localStorage.setItem(this.USER_KEY, JSON.stringify(response.user));
-        this.setCurrentUser(response.user);
-      }));
+      .pipe(
+        tap((response) => {
+          // En un enfoque basado en cookies, solo guardamos el usuario en localStorage
+          // para mantener la UI actualizada, pero la autenticación real se maneja con cookies
+          localStorage.setItem(this.USER_KEY, JSON.stringify(response.user));
+          this.setCurrentUser(response.user);
+        })
+      );
   }
 
   register(userData: RegisterRequest): Observable<AuthResponse> {
     return this.http
       .post<AuthResponse>(`${this.API_URL}/auth/register`, userData)
-      .pipe(tap((response) => {
-        // En un enfoque basado en cookies, solo guardamos el usuario en localStorage
-        // para mantener la UI actualizada
-        localStorage.setItem(this.USER_KEY, JSON.stringify(response.user));
-        this.setCurrentUser(response.user);
-      }));
+      .pipe(
+        tap((response) => {
+          // En un enfoque basado en cookies, solo guardamos el usuario en localStorage
+          // para mantener la UI actualizada
+          localStorage.setItem(this.USER_KEY, JSON.stringify(response.user));
+          this.setCurrentUser(response.user);
+        })
+      );
   }
-  
+
   // Actualiza el estado de autenticación y la información del usuario
   private setCurrentUser(user: any): void {
     this.currentUserSubject.next(user);
@@ -111,16 +115,16 @@ export class AuthService {
 
   // Verificar si hay una sesión activa
   checkSession(): Observable<any> {
-    return this.http
-      .get<any>(`${this.API_URL}/auth/me`)
-      .pipe(tap((user) => {
+    return this.http.get<any>(`${this.API_URL}/auth/me`).pipe(
+      tap((user) => {
         // Guardar los datos del usuario en localStorage para mantener la UI actualizada
         // cuando se recargue la página
         if (user) {
           localStorage.setItem(this.USER_KEY, JSON.stringify(user));
         }
         this.setCurrentUser(user);
-      }));
+      })
+    );
   }
 
   // Comprobar si el usuario está autenticado

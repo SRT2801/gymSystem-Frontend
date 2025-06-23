@@ -21,30 +21,44 @@ export class Header implements OnInit, OnDestroy {
   private authSubscription: Subscription = new Subscription();
   private userSubscription: Subscription = new Subscription();
 
-  constructor(private router: Router, private authService: AuthService) {}
+  constructor(private router: Router, private authService: AuthService) {
+    this.initializeUserState();
+  }
+
+  private initializeUserState(): void {
+    const user = this.authService.getUser();
+    if (user) {
+      this.isAuthenticated = true;
+      this.userName = user.name || '';
+    }
+  }
 
   ngOnInit() {
-    // Suscribirse al estado de autenticación
     this.authSubscription = this.authService.authState$.subscribe(
       (isAuthenticated) => {
         this.isAuthenticated = isAuthenticated;
+
+        if (!isAuthenticated) {
+          this.userName = '';
+        }
       }
     );
 
-    // Suscribirse a los cambios del usuario actual
     this.userSubscription = this.authService.currentUser$.subscribe((user) => {
-      if (user) {
+      if (user && user.name) {
         this.userName = user.name;
-      } else {
-        this.userName = '';
+        this.isAuthenticated = true;
       }
     });
   }
 
   ngOnDestroy() {
-    // Limpiar suscripciones para evitar memory leaks
-    this.authSubscription.unsubscribe();
-    this.userSubscription.unsubscribe();
+    if (this.authSubscription) {
+      this.authSubscription.unsubscribe();
+    }
+    if (this.userSubscription) {
+      this.userSubscription.unsubscribe();
+    }
   }
 
   @HostListener('window:scroll', [])
@@ -82,17 +96,14 @@ export class Header implements OnInit, OnDestroy {
     this.closeMobileMenu();
     this.navigateTo(route);
   }
+
   logout() {
     this.authService.logout().subscribe({
       next: () => {
-        // Ya no necesitamos actualizar manualmente isAuthenticated y userName
-        // ya que estamos suscritos a los cambios del servicio
-
-        // Redirección a la página principal después del logout
         this.router.navigate(['/login']);
       },
       error: () => {
-        console.error('Error al cerrar sesión');
+        this.router.navigate(['/login']);
       },
     });
   }

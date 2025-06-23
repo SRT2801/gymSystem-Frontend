@@ -23,7 +23,6 @@ export class ScrollAnimationDirective implements AfterViewInit, OnDestroy {
   ) {}
 
   ngAfterViewInit(): void {
-    // Agregar una clase inicial para configurar el estado "oculto"
     this.el.nativeElement.classList.add('scroll-animation');
 
     this.scrollAnimationService
@@ -31,12 +30,10 @@ export class ScrollAnimationDirective implements AfterViewInit, OnDestroy {
       .subscribe((visibleElement) => {
         if (this.el.nativeElement === visibleElement) {
           if (this.delay) {
-            // Si hay un delay, esperamos antes de aplicar la animación
             this.timeout = setTimeout(() => {
               this.el.nativeElement.classList.add(this.animationClass);
             }, this.delay);
           } else {
-            // Si no hay delay, aplicamos la animación inmediatamente
             this.el.nativeElement.classList.add(this.animationClass);
           }
         }
@@ -44,11 +41,10 @@ export class ScrollAnimationDirective implements AfterViewInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    // Limpiar el timeout si existe
     if (this.timeout) {
       clearTimeout(this.timeout);
     }
-    // Dejar de observar el elemento
+
     this.scrollAnimationService.unobserveElement(this.el.nativeElement);
   }
 }

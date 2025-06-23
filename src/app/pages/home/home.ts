@@ -9,10 +9,11 @@ import {
   animate,
   transition,
 } from '@angular/animations';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-home',
-  imports: [CommonModule, ScrollAnimationDirective],
+  imports: [CommonModule, ScrollAnimationDirective, RouterLink],
   templateUrl: './home.html',
   styleUrl: './home.scss',
   standalone: true,
@@ -55,10 +56,8 @@ import {
     ]),
   ],
 })
-export class Home implements OnInit {
- 
+export class Home {
   isLoaded = true;
-
 
   stats = [
     { value: 2500, label: 'Miembros', icon: 'fa-users', suffix: '+' },
@@ -89,7 +88,6 @@ export class Home implements OnInit {
       description: 'Cardio de alto impacto',
       schedule: 'Lun a Vie 6:00 PM',
     },
-
   ];
 
   trainers = [
@@ -118,13 +116,4 @@ export class Home implements OnInit {
         'https://images.unsplash.com/photo-1609899537878-88d5ba429bbb?auto=format&fit=crop&w=800',
     },
   ];
-  constructor(private scrollAnimationService: ScrollAnimationService) {
-    console.log('[DEBUG] Inicializando componente Home');
-  }
-
-  ngOnInit(): void {
-    console.log('[DEBUG] Home inicializado correctamente');
-
-
-  }
 }

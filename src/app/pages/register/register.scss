@@ -1,0 +1,355 @@
+@use "sass:color";
+
+// Variables (basadas en las de home.scss)
+$primary-color: #ff4d30;
+$secondary-color: #212529;
+$light-color: #f8f9fa;
+$dark-color: #121212;
+$gray-color: #6c757d;
+$text-color: #333;
+$border-radius: 8px;
+$transition: all 0.3s ease;
+
+// Estilos del registro
+.register-container {
+  min-height: 100vh;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start; // Cambiar a flex-start para que comience desde arriba
+  align-items: center;
+  position: relative;
+  background-image: url("/assets/img/gym-interior.jpg");
+  background-size: cover;
+  background-position: center;
+  padding: 2rem;
+  padding-top: 2rem; // Añadir más espacio arriba
+
+  // Overlay con efecto oscuro
+  .overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    z-index: 1;
+  }
+
+  // Todos los elementos deben estar sobre el overlay
+  .register-header,
+  .register-card,
+  .register-footer {
+    position: relative;
+    z-index: 2;
+  }
+}
+
+// Encabezado del registro
+.register-header {
+  text-align: center;
+  margin-bottom: 2rem;
+  color: $light-color;
+  opacity: 0;
+  transform: translateY(-20px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+
+  &.animate {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .logo {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+
+    .highlight {
+      color: $primary-color;
+    }
+  }
+
+  .tagline {
+    font-size: 1rem;
+    opacity: 0.8;
+  }
+}
+
+// Tarjeta de registro
+.register-card {
+  width: 100%;
+  max-width: 800px; // Aumentado para acomodar dos columnas
+  background-color: rgba(255, 255, 255, 0.95);
+  border-radius: $border-radius;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+  overflow-y: auto; // Permitir desplazamiento si el contenido es demasiado largo
+  max-height: 85vh; // Limitar la altura máxima
+  transition: $transition;
+  opacity: 0;
+  transform: scale(0.95);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+
+  &.animate {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  &:hover {
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+  }
+  .register-card-inner {
+    padding: 2rem;
+
+    h2 {
+      font-size: 1.75rem;
+      color: $secondary-color;
+      text-align: center;
+      margin-bottom: 1.5rem;
+      font-weight: 600;
+      position: relative;
+
+      &:after {
+        content: "";
+        display: block;
+        width: 60px;
+        height: 4px;
+        background: $primary-color;
+        margin: 0.7rem auto 0;
+        border-radius: 2px;
+      }
+    }
+  }
+}
+
+// Formulario
+.register-form {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+
+  @media (min-width: 768px) {
+    grid-template-columns: 1fr 1fr; // Dos columnas en desktop
+    column-gap: 1.5rem;
+  }
+
+  // Elementos que deben ocupar todo el ancho
+  .success-message,
+  .register-error,
+  .form-submit,
+  .additional-links {
+    grid-column: 1 / -1;
+  }
+
+  .form-group {
+    margin-bottom: 0.5rem;
+    opacity: 0;
+    transition: opacity 0.6s ease, transform 0.6s ease;
+
+    &.slide-in-left {
+      transform: translateX(-20px);
+      &.animate {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    &.slide-in-right {
+      transform: translateX(20px);
+      &.animate {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+    label {
+      display: block;
+      font-weight: 500;
+      margin-bottom: 0.3rem; // Reducido
+      color: $secondary-color;
+      font-size: 0.9rem; // Texto más pequeño para las etiquetas
+    }
+
+    .input-wrapper {
+      position: relative;
+
+      i {
+        position: absolute;
+        left: 12px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: $gray-color;
+        font-size: 0.9rem; // Iconos más pequeños
+      }
+
+      input {
+        width: 100%;
+        padding: 10px 12px 10px 35px; // Reducido el padding
+        border: 1px solid #ddd;
+        border-radius: $border-radius;
+        font-size: 0.95rem; // Texto un poco más pequeño
+        transition: $transition;
+
+        &:focus {
+          outline: none;
+          box-shadow: 0 0 0 2px rgba($primary-color, 0.3);
+          border-color: $primary-color;
+        }
+
+        &.is-invalid {
+          border-color: #dc3545;
+          box-shadow: 0 0 0 2px rgba(#dc3545, 0.2);
+        }
+      }
+    }    .error-message {
+      color: #dc3545;
+      font-size: 0.8rem;
+      margin-top: 0.3rem;
+      display: block;
+      min-height: 1rem; // Altura mínima fija para evitar que el layout salte
+    }
+
+    @media (min-width: 768px) {
+      // Asegurar que los inputs tengan la misma altura en ambas columnas
+      .input-wrapper input {
+        height: 42px; // Altura fija para todos los inputs
+      }
+    }
+  }
+  .success-message {
+    background-color: #d4edda;
+    color: #155724;
+    padding: 1rem;
+    border-radius: $border-radius;
+    margin-bottom: 1.5rem;
+    text-align: center;
+    width: 100%;
+
+    i {
+      margin-right: 0.5rem;
+    }
+  }
+
+  .register-error {
+    background-color: #f8d7da;
+    color: #721c24;
+    padding: 1rem;
+    border-radius: $border-radius;
+    margin-bottom: 1.5rem;
+    text-align: center;
+    width: 100%;
+
+    i {
+      margin-right: 0.5rem;
+    }
+  }
+
+  .form-submit {
+    margin-top: 2rem;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+
+    &.animate {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .register-btn {
+      width: 100%;
+      padding: 12px;
+      background-color: $primary-color;
+      color: white;
+      border: none;
+      border-radius: $border-radius;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: $transition;
+      position: relative;
+
+      &:hover {
+        background-color: darken($primary-color, 10%);
+      }
+
+      &:disabled {
+        background-color: lighten($primary-color, 20%);
+        cursor: not-allowed;
+      }
+
+      .spinner {
+        display: inline-block;
+        width: 20px;
+        height: 20px;
+        border: 3px solid rgba(255, 255, 255, 0.3);
+        border-radius: 50%;
+        border-top-color: #fff;
+        animation: spin 1s ease-in-out infinite;
+      }
+    }
+  }
+
+  .additional-links {
+    text-align: center;
+    margin-top: 1.5rem;
+    opacity: 0;
+    transition: opacity 0.6s ease;
+
+    &.animate {
+      opacity: 1;
+    }
+
+    a {
+      color: $primary-color;
+      text-decoration: none;
+      font-weight: 500;
+      transition: $transition;
+
+      &:hover {
+        color: darken($primary-color, 15%);
+        text-decoration: underline;
+      }
+    }
+  }
+}
+
+
+
+// Keyframes para animaciones
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+// Responsive
+@media (max-width: 768px) {
+  .register-container {
+    padding: 1rem;
+  }
+
+  .register-card {
+    .register-card-inner {
+      padding: 1.5rem;
+    }
+  }
+
+  .register-header {
+    .logo {
+      font-size: 2rem;
+    }
+  }
+
+  .register-form {
+    grid-template-columns: 1fr; // Una columna en móvil
+  }
+}
+
+@media (min-width: 768px) {
+  .register-card-inner {
+    padding: 2.5rem;
+  }
+
+  // Agregar estilos específicos para campos que necesitan más espacio
+  .form-group.full-width {
+    grid-column: 1 / -1; // Ocupar todo el ancho disponible
+  }
+}

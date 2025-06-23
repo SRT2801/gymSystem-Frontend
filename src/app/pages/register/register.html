@@ -1,1 +1,134 @@
-<p>register works!</p>
+<div class="register-container">
+  <div class="overlay"></div>
+
+  <!-- Logo y título -->
+  <div class="register-header">
+    <h1 class="logo">PowerFit<span class="highlight">GYM</span></h1>
+    <p class="tagline">Únete a la comunidad fitness más grande</p>
+  </div>
+
+  <!-- Formulario de registro -->
+  <div class="register-card">
+    <div class="register-card-inner">
+      <h2>Crear Cuenta</h2>
+
+      <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="register-form">        <!-- Mensaje de éxito -->
+        <div class="success-message full-width" *ngIf="registerSuccess">
+          <i class="fas fa-check-circle"></i>
+          ¡Registro exitoso! Serás redirigido automáticamente...
+        </div>
+
+        <!-- Campo de nombre -->
+        <div class="form-group slide-in-left">
+          <label for="name">Nombre Completo</label>
+          <div class="input-wrapper">
+            <i class="fas fa-user"></i>
+            <input type="text" id="name" formControlName="name" placeholder="Tu nombre completo"
+              [class.is-invalid]="registerForm.get('name')?.invalid && registerForm.get('name')?.touched">
+          </div>
+          <div class="error-message" *ngIf="registerForm.get('name')?.invalid && registerForm.get('name')?.touched">
+            {{ getErrorMessage('name') }}
+          </div>
+        </div>
+
+        <!-- Campo de email -->
+        <div class="form-group slide-in-right">
+          <label for="email">Email</label>
+          <div class="input-wrapper">
+            <i class="fas fa-envelope"></i>
+            <input type="email" id="email" formControlName="email" placeholder="correo@ejemplo.com"
+              [class.is-invalid]="registerForm.get('email')?.invalid && registerForm.get('email')?.touched">
+          </div>
+          <div class="error-message" *ngIf="registerForm.get('email')?.invalid && registerForm.get('email')?.touched">
+            {{ getErrorMessage('email') }}
+          </div>
+        </div>
+
+        <!-- Campo de contraseña -->
+        <div class="form-group slide-in-left">
+          <label for="password">Contraseña</label>
+          <div class="input-wrapper">
+            <i class="fas fa-lock"></i>
+            <input type="password" id="password" formControlName="password" placeholder="Tu contraseña"
+              [class.is-invalid]="registerForm.get('password')?.invalid && registerForm.get('password')?.touched">
+          </div>
+          <div class="error-message"
+            *ngIf="registerForm.get('password')?.invalid && registerForm.get('password')?.touched">
+            {{ getErrorMessage('password') }}
+          </div>
+        </div> <!-- Campo de confirmación de contraseña -->
+        <div class="form-group slide-in-right">
+          <label for="confirmPassword">Confirmar Contraseña</label>
+          <div class="input-wrapper">
+            <i class="fas fa-lock"></i>
+            <input type="password" id="confirmPassword" formControlName="confirmPassword"
+              placeholder="Confirma tu contraseña"
+              [class.is-invalid]="registerForm.get('confirmPassword')?.invalid && registerForm.get('confirmPassword')?.touched">
+          </div>
+          <div class="error-message"
+            *ngIf="registerForm.get('confirmPassword')?.invalid && registerForm.get('confirmPassword')?.touched">
+            {{ getErrorMessage('confirmPassword') }}
+          </div>
+        </div>
+
+        <!-- Campo de teléfono -->
+        <div class="form-group slide-in-left">
+          <label for="phone">Teléfono</label>
+          <div class="input-wrapper">
+            <i class="fas fa-phone"></i>
+            <input type="tel" id="phone" formControlName="phone" placeholder="Ej: 555-123-4567"
+              [class.is-invalid]="registerForm.get('phone')?.invalid && registerForm.get('phone')?.touched">
+          </div>
+          <div class="error-message" *ngIf="registerForm.get('phone')?.invalid && registerForm.get('phone')?.touched">
+            {{ getErrorMessage('phone') }}
+          </div>
+        </div>
+
+        <!-- Campo de documento de identidad -->
+        <div class="form-group slide-in-right">
+          <label for="documentId">Documento de Identidad</label>
+          <div class="input-wrapper">
+            <i class="fas fa-id-card"></i>
+            <input type="text" id="documentId" formControlName="documentId" placeholder="ABC123456789"
+              [class.is-invalid]="registerForm.get('documentId')?.invalid && registerForm.get('documentId')?.touched">
+          </div>
+          <div class="error-message"
+            *ngIf="registerForm.get('documentId')?.invalid && registerForm.get('documentId')?.touched">
+            {{ getErrorMessage('documentId') }}
+          </div>
+        </div>
+
+        <!-- Campo de fecha de nacimiento -->
+        <div class="form-group slide-in-left">
+          <label for="birthDate">Fecha de Nacimiento</label>
+          <div class="input-wrapper">
+            <i class="fas fa-calendar-alt"></i>
+            <input type="date" id="birthDate" formControlName="birthDate"
+              [class.is-invalid]="registerForm.get('birthDate')?.invalid && registerForm.get('birthDate')?.touched">
+          </div>
+          <div class="error-message"
+            *ngIf="registerForm.get('birthDate')?.invalid && registerForm.get('birthDate')?.touched">
+            {{ getErrorMessage('birthDate') }}
+          </div>
+        </div>        <!-- Mensaje de error de registro -->
+        <div class="register-error full-width" *ngIf="registerError">
+          <i class="fas fa-exclamation-circle"></i>
+          {{ registerError }}
+        </div>
+
+        <!-- Botón de registro -->
+        <div class="form-submit full-width">
+          <button type="submit" class="register-btn" [disabled]="isLoading || registerSuccess">
+            <span *ngIf="!isLoading">CREAR CUENTA</span>
+            <span *ngIf="isLoading" class="spinner"></span>
+          </button>
+        </div>
+
+        <!-- Links adicionales -->
+        <div class="additional-links full-width">
+          <p>¿Ya tienes una cuenta? <a routerLink="/login">Inicia sesión</a></p>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

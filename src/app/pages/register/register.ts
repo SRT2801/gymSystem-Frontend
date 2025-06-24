@@ -77,12 +77,11 @@ export class Register implements AfterViewInit {
       this.authService.register(userData).subscribe({
         next: (response) => {
           this.isLoading = false;
-          this.registerSuccess = true; // Redirección automática después de un registro exitoso
+          this.registerSuccess = true;
           setTimeout(() => {
-            // Redirigir según el rol del usuario usando el método getRedirectUrl
             const redirectUrl = this.authService.getRedirectUrl();
             this.router.navigate([redirectUrl]).then(() => {
-              window.scrollTo(0, 0); // Scroll automático al inicio de la página
+              window.scrollTo(0, 0);
             });
           }, 2000);
         },
@@ -102,7 +101,6 @@ export class Register implements AfterViewInit {
         },
       });
     } else {
-      // Marcar todos los campos como tocados para mostrar errores de validación
       Object.keys(this.registerForm.controls).forEach((key) => {
         this.registerForm.get(key)?.markAsTouched();
       });
@@ -174,31 +172,26 @@ export class Register implements AfterViewInit {
     return '';
   }
   ngAfterViewInit(): void {
-    // Activar las animaciones manualmente con un pequeño retraso para que el DOM esté listo
     setTimeout(() => {
-      // Animar el header
       const header = document.querySelector('.register-header');
       if (header) header.classList.add('animate');
 
-      // Animar la tarjeta principal
       setTimeout(() => {
         const card = document.querySelector('.register-card');
         if (card) card.classList.add('animate');
-      }, 200); // Animar los campos del formulario en orden por filas (respetando el layout de dos columnas)
+      }, 200);
       const formGroups = document.querySelectorAll('.form-group');
-      const totalRows = Math.ceil(formGroups.length / 2); // Número de filas (2 columnas)
+      const totalRows = Math.ceil(formGroups.length / 2);
 
       formGroups.forEach((element, index) => {
-        // Calcular la fila y la columna para animar en el orden correcto
         const row = Math.floor(index / 2);
-        const delay = 400 + row * 150; // Incremento por fila, no por elemento individual
+        const delay = 400 + row * 150;
 
         setTimeout(() => {
           element.classList.add('animate');
         }, delay);
       });
 
-      // Animar los demás elementos
       setTimeout(() => {
         const formSubmit = document.querySelector('.form-submit');
         if (formSubmit) formSubmit.classList.add('animate');

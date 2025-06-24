@@ -12,14 +12,31 @@
     </div>
     <span class="role-badge">{{userRole | titlecase}}</span>
   </div>
-
   <nav class="sidebar-nav">
     <ul>
-      <li *ngFor="let item of filteredMenuItems" [routerLinkActive]="['active']">
-        <a [routerLink]="item.route" (click)="closeSidebarOnNavigate()">
+      <li *ngFor="let item of filteredMenuItems" [routerLinkActive]="['active']" [class.has-submenu]="item.submenu">
+        <!-- Item con submenú -->
+        <a *ngIf="item.submenu" (click)="toggleSubmenu(item)" [class.active]="item.expanded">
+          <i class="material-icons">{{item.icon}}</i>
+          <span>{{item.title}}</span>
+          <i class="material-icons submenu-icon" [class.expanded]="item.expanded">expand_more</i>
+        </a>
+
+        <!-- Item sin submenú -->
+        <a *ngIf="!item.submenu && item.route" [routerLink]="item.route" (click)="closeSidebarOnNavigate()">
           <i class="material-icons">{{item.icon}}</i>
           <span>{{item.title}}</span>
         </a>
+
+        <!-- Submenús -->
+        <ul *ngIf="item.submenu" class="submenu" [class.expanded]="item.expanded">
+          <li *ngFor="let subItem of item.submenu" [routerLinkActive]="['active']">
+            <a [routerLink]="subItem.route" (click)="closeSidebarOnNavigate()">
+              <i class="material-icons">{{subItem.icon}}</i>
+              <span>{{subItem.title}}</span>
+            </a>
+          </li>
+        </ul>
       </li>
     </ul>
   </nav>

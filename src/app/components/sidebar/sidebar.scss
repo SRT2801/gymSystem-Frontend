@@ -86,6 +86,22 @@ $transition-speed: 0.3s;
     li {
       margin-bottom: 5px;
 
+      &.has-submenu {
+        > a {
+          position: relative;
+        }
+
+        .submenu-icon {
+          position: absolute;
+          right: 15px;
+          transition: transform $transition-speed;
+
+          &.expanded {
+            transform: rotate(180deg);
+          }
+        }
+      }
+
       a {
         display: flex;
         align-items: center;
@@ -114,6 +130,32 @@ $transition-speed: 0.3s;
       &.active a {
         background-color: rgba(255, 77, 48, 0.15);
         border-left-color: $primary-color;
+      }
+
+      // Estilos para submenús
+      .submenu {
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height $transition-speed;
+        padding-left: 0;
+        background-color: rgba(0, 0, 0, 0.2);
+
+        &.expanded {
+          max-height: 500px; // Altura máxima para la animación
+        }
+
+        li {
+          margin-bottom: 0;
+
+          a {
+            padding-left: 48px; // Indentación para submenús
+            font-size: 0.85rem;
+
+            i {
+              font-size: 16px;
+            }
+          }
+        }
       }
     }
   }

@@ -13,47 +13,65 @@ import { AuthService } from '../../services/auth.service';
 export class SidebarComponent {
   @Input() userRole: string = 'user';
   @Output() sidebarToggle = new EventEmitter<boolean>();
-
-  menuItems: { title: string; route: string; icon: string; roles: string[] }[] =
-    [
-      {
-        title: 'Dashboard',
-        route: '/dashboard',
-        icon: 'dashboard',
-        roles: ['user', 'admin', 'trainer'],
-      },
-      {
-        title: 'Mi Perfil',
-        route: '/profile',
-        icon: 'person',
-        roles: ['user', 'admin', 'trainer'],
-      },
-      {
-        title: 'Clases',
-        route: '/classes',
-        icon: 'fitness_center',
-        roles: ['user', 'trainer'],
-      },
-      {
-        title: 'Membresías',
-        route: '/memberships',
-        icon: 'card_membership',
-        roles: ['user'],
-      },
-      { title: 'Usuarios', route: '/users', icon: 'people', roles: ['admin'] },
-      {
-        title: 'Reportes',
-        route: '/reports',
-        icon: 'bar_chart',
-        roles: ['admin'],
-      },
-      {
-        title: 'Entrenamiento',
-        route: '/training',
-        icon: 'sports',
-        roles: ['trainer'],
-      },
-    ];
+  menuItems: {
+    title: string;
+    route: string | null;
+    icon: string;
+    roles: string[];
+    expanded?: boolean;
+    submenu?: { title: string; route: string; icon: string; roles: string[] }[];
+  }[] = [
+    {
+      title: 'Dashboard',
+      route: '/dashboard',
+      icon: 'dashboard',
+      roles: ['user', 'admin', 'trainer'],
+    },
+    {
+      title: 'Mi Perfil',
+      route: '/profile',
+      icon: 'person',
+      roles: ['user', 'admin', 'trainer'],
+    },
+    {
+      title: 'Clases',
+      route: '/classes',
+      icon: 'fitness_center',
+      roles: ['user', 'trainer'],
+    },
+    {
+      title: 'Membresías',
+      route: '/memberships',
+      icon: 'card_membership',
+      roles: ['user'],
+    },
+    {
+      title: 'Usuarios',
+      route: null,
+      icon: 'people',
+      roles: ['admin'],
+      submenu: [
+        {
+          title: 'Miembros',
+          route: '/admin/members',
+          icon: 'person_add',
+          roles: ['admin'],
+        },
+      ],
+    },
+    {
+      title: 'Reportes',
+      route: '/reports',
+      icon: 'bar_chart',
+      roles: ['admin'],
+    },
+    {
+      title: 'Entrenamiento',
+      route: '/training',
+      icon: 'sports',
+      roles: ['trainer'],
+    },
+  ];
 
   constructor(private authService: AuthService, private router: Router) {}
 
@@ -70,6 +88,14 @@ export class SidebarComponent {
         this.router.navigate(['/home']);
       },
     });
+  }
+
+  /**
+   * Toggle para expandir/contraer submenús
+   * @param item Item del menú a expandir/contraer
+   */
+  toggleSubmenu(item: any) {
+    item.expanded = !item.expanded;
   }
 
   // Métodos para manejo del sidebar en móvil

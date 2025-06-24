@@ -79,7 +79,9 @@ export class Register implements AfterViewInit {
           this.isLoading = false;
           this.registerSuccess = true; // Redirección automática después de un registro exitoso
           setTimeout(() => {
-            this.router.navigate(['/home']).then(() => {
+            // Redirigir según el rol del usuario usando el método getRedirectUrl
+            const redirectUrl = this.authService.getRedirectUrl();
+            this.router.navigate([redirectUrl]).then(() => {
               window.scrollTo(0, 0); // Scroll automático al inicio de la página
             });
           }, 2000);

@@ -102,7 +102,6 @@ export class AuthService {
         })
       );
   }
-
   register(userData: RegisterRequest): Observable<AuthResponse> {
     return this.http
       .post<AuthResponse>(`${this.API_URL}/auth/register`, userData)
@@ -112,6 +111,10 @@ export class AuthService {
             localStorage.setItem(this.USER_KEY, JSON.stringify(response.user));
             this.setCurrentUser(response.user);
           }
+        }),
+        catchError((error) => {
+          // Reenviamos el error para que el componente pueda manejarlo
+          return throwError(() => error);
         })
       );
   }

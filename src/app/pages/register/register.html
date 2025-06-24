@@ -11,8 +11,7 @@
   <div class="register-card">
     <div class="register-card-inner">
       <h2>Crear Cuenta</h2>
-
-      <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="register-form"> <!-- Mensaje de éxito -->
+      <form [formGroup]="registerForm" class="register-form"> <!-- Mensaje de éxito -->
         <div class="success-message full-width" *ngIf="registerSuccess">
           <i class="fas fa-check-circle"></i>
           ¡Registro exitoso! Serás redirigido automáticamente...

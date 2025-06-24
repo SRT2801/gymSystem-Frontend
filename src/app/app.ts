@@ -12,7 +12,6 @@ export class App implements OnInit {
   protected title = 'gymSystemFrontend';
 
   constructor(private authService: AuthService, private router: Router) {}
-
   ngOnInit() {
     if (this.authService.isAuthenticated()) {
       const redirectUrl = this.authService.getRedirectUrl();
@@ -24,6 +23,6 @@ export class App implements OnInit {
       }
     }
 
-    this.authService.checkSession().subscribe();
+   
   }
 }

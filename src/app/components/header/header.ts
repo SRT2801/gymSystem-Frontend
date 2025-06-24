@@ -17,6 +17,7 @@ export class Header implements OnInit, OnDestroy {
   scrolled = false;
   isAuthenticated = false;
   userName: string = '';
+  isAdmin = false;
 
   private authSubscription: Subscription = new Subscription();
   private userSubscription: Subscription = new Subscription();
@@ -24,12 +25,12 @@ export class Header implements OnInit, OnDestroy {
   constructor(private router: Router, private authService: AuthService) {
     this.initializeUserState();
   }
-
   private initializeUserState(): void {
     const user = this.authService.getUser();
     if (user) {
       this.isAuthenticated = true;
       this.userName = user.name || '';
+      this.isAdmin = this.authService.isAdmin();
     }
   }
 
@@ -43,11 +44,11 @@ export class Header implements OnInit, OnDestroy {
         }
       }
     );
-
     this.userSubscription = this.authService.currentUser$.subscribe((user) => {
       if (user && user.name) {
         this.userName = user.name;
         this.isAuthenticated = true;
+        this.isAdmin = this.authService.isAdmin();
       }
     });
   }
@@ -91,19 +92,17 @@ export class Header implements OnInit, OnDestroy {
   navigateTo(route: string) {
     this.router.navigate([route]);
   }
-
   navigateToAndClose(route: string) {
     this.closeMobileMenu();
     this.navigateTo(route);
   }
-
   logout() {
     this.authService.logout().subscribe({
       next: () => {
-        this.router.navigate(['/login']);
+        this.router.navigate(['/home']);
       },
       error: () => {
-        this.router.navigate(['/login']);
+        this.router.navigate(['/home']);
       },
     });
   }

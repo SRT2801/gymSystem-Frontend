@@ -7,8 +7,7 @@
           <span class="logo-text">PowerFit<span class="highlight">GYM</span></span>
         </a>
       </div>
-
-      <nav class="main-nav">
+      <nav class="main-nav" *ngIf="!isAuthenticated">
         <ul class="nav-links">
           <li><a routerLink="/home" class="nav-link">Inicio</a></li>
           <li><a routerLink="/clases" class="nav-link">Clases</a></li>
@@ -29,10 +28,7 @@
             <app-boton texto="Registrarse" tipo="primary" size="medium"
               (buttonClick)="navigateTo('/register')"></app-boton>
           </div>
-        </ng-container>
-
-        <!-- Mostrar cuando el usuario SÍ está autenticado -->
-        <ng-container *ngIf="isAuthenticated">
+        </ng-container> <!-- Mostrar cuando el usuario SÍ está autenticado --> <ng-container *ngIf="isAuthenticated">
           <div class="user-welcome">
             Hola, {{userName}}
           </div>
@@ -54,12 +50,14 @@
 <!-- Menú móvil para pantallas pequeñas -->
 <div class="mobile-menu" [class.active]="isMobileMenuOpen">
   <ul class="mobile-nav-links">
-    <li><a routerLink="/home" (click)="closeMobileMenu()">Inicio</a></li>
-    <li><a routerLink="/clases" (click)="closeMobileMenu()">Clases</a></li>
-    <li><a routerLink="/entrenadores" (click)="closeMobileMenu()">Entrenadores</a></li>
-    <li><a routerLink="/planes" (click)="closeMobileMenu()">Planes</a></li>
-    <li><a routerLink="/horarios" (click)="closeMobileMenu()">Horarios</a></li>
-    <li><a routerLink="/contacto" (click)="closeMobileMenu()">Contacto</a></li>
+    <ng-container *ngIf="!isAuthenticated">
+      <li><a routerLink="/home" (click)="closeMobileMenu()">Inicio</a></li>
+      <li><a routerLink="/clases" (click)="closeMobileMenu()">Clases</a></li>
+      <li><a routerLink="/entrenadores" (click)="closeMobileMenu()">Entrenadores</a></li>
+      <li><a routerLink="/planes" (click)="closeMobileMenu()">Planes</a></li>
+      <li><a routerLink="/horarios" (click)="closeMobileMenu()">Horarios</a></li>
+      <li><a routerLink="/contacto" (click)="closeMobileMenu()">Contacto</a></li>
+    </ng-container>
 
     <!-- Opciones para usuarios NO autenticados -->
     <li class="mobile-auth" *ngIf="!isAuthenticated">
@@ -71,9 +69,7 @@
         <app-boton texto="Registrarse" tipo="primary" size="medium" [fullWidth]="true"
           (buttonClick)="navigateToAndClose('/register')"></app-boton>
       </div>
-    </li>
-
-    <!-- Opciones para usuarios autenticados -->
+    </li> <!-- Opciones para usuarios autenticados -->
     <li class="mobile-auth" *ngIf="isAuthenticated">
       <div class="user-welcome-mobile">
         Hola, {{userName}}

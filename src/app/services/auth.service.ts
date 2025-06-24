@@ -177,6 +177,27 @@ export class AuthService {
     return !!this.currentUserSubject.getValue();
   }
 
+  hasRole(role: string): boolean {
+    const user = this.currentUserSubject.getValue();
+    return user && user.role === role;
+  }
+
+  isAdmin(): boolean {
+    return this.hasRole('admin');
+  }
+
+  getRedirectUrl(): string {
+    const user = this.currentUserSubject.getValue();
+    if (!user) return '/home';
+
+    switch (user.role) {
+      case 'admin':
+        return '/admin';
+      default:
+        return '/home';
+    }
+  }
+
   private clearUserData(): void {
     localStorage.removeItem(this.USER_KEY);
     this.currentUserSubject.next(null);

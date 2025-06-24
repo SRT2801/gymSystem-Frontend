@@ -17,13 +17,10 @@ export class AuthenticatedLayoutComponent implements OnInit {
   userRole: string = 'user';
 
   constructor(private authService: AuthService) {}
-
   ngOnInit() {
-    // Determinar el rol del usuario basado en si es admin
     if (this.authService.isAdmin()) {
       this.userRole = 'admin';
     } else {
-      // Aquí podrías añadir lógica adicional para otros roles
       this.userRole = 'user';
     }
   }

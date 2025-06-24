@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { RouterOutlet, Router } from '@angular/router';
 import { Header } from './components/header/header';
 import { Footer } from './components/footer/footer';
 import { AuthService } from './services/auth.service';
@@ -13,9 +13,22 @@ import { AuthService } from './services/auth.service';
 export class App implements OnInit {
   protected title = 'gymSystemFrontend';
 
-  constructor(private authService: AuthService) {}
+  constructor(private authService: AuthService, private router: Router) {}
 
   ngOnInit() {
-    this.authService.getUser();
+    
+    if (this.authService.isAuthenticated()) {
+
+      const redirectUrl = this.authService.getRedirectUrl();
+      if (
+        window.location.pathname === '/' ||
+        window.location.pathname === '/home'
+      ) {
+        this.router.navigate([redirectUrl]);
+      }
+    }
+
+
+    this.authService.checkSession().subscribe();
   }
 }

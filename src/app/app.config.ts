@@ -2,7 +2,6 @@ import {
   ApplicationConfig,
   provideBrowserGlobalErrorListeners,
   provideZoneChangeDetection,
-  importProvidersFrom,
 } from '@angular/core';
 import { provideRouter, withViewTransitions } from '@angular/router';
 import {

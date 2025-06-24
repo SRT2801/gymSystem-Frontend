@@ -50,8 +50,9 @@ export class Login implements AfterViewInit {
       this.authService.login(credentials).subscribe({
         next: (response) => {
           this.isLoading = false;
-
-          this.router.navigate(['/home']).then(() => {
+          // Redirigir según el rol del usuario usando el método getRedirectUrl
+          const redirectUrl = this.authService.getRedirectUrl();
+          this.router.navigate([redirectUrl]).then(() => {
             window.scrollTo(0, 0);
           });
         },

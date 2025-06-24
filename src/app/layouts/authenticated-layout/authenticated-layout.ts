@@ -15,13 +15,23 @@ import { CommonModule } from '@angular/common';
 })
 export class AuthenticatedLayoutComponent implements OnInit {
   userRole: string = 'user';
+  sidebarVisible: boolean = false;
 
   constructor(private authService: AuthService) {}
+
   ngOnInit() {
     if (this.authService.isAdmin()) {
       this.userRole = 'admin';
     } else {
       this.userRole = 'user';
     }
+  }
+
+  toggleSidebar() {
+    this.sidebarVisible = !this.sidebarVisible;
+  }
+
+  closeSidebar() {
+    this.sidebarVisible = false;
   }
 }

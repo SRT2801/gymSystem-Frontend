@@ -1,5 +1,10 @@
 <div class="authenticated-layout">
-  <app-sidebar [userRole]="userRole"></app-sidebar>
+
+  <app-sidebar [userRole]="userRole" [class.active]="sidebarVisible"
+    (sidebarToggle)="sidebarVisible = $event"></app-sidebar>
+
+
+  <div class="sidebar-overlay" [class.active]="sidebarVisible" (click)="closeSidebar()"></div>
 
   <div class="main-content">
     <app-header></app-header>
@@ -7,4 +12,8 @@
       <router-outlet></router-outlet>
     </div>
   </div>
+
+  <button class="sidebar-toggle" *ngIf="!sidebarVisible" (click)="toggleSidebar()">
+    <i class="material-icons">menu</i>
+  </button>
 </div>

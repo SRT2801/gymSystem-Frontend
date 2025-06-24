@@ -41,27 +41,19 @@ export class AuthService {
   private readonly API_URL = environment.apiUrl;
   private readonly USER_KEY = environment.userKey;
 
-  // Bandera para evitar actualizaciones innecesarias
   private sessionCheckInProgress = false;
 
-  // Para almacenar la llamada a checkSession en curso
   private sessionCheckObs: Observable<any> | null = null;
 
-  // BehaviorSubject para manejar el estado de autenticación
   private authStateSubject = new BehaviorSubject<boolean>(false);
   public authState$ = this.authStateSubject.asObservable();
 
-  // BehaviorSubject para manejar la información del usuario
   private currentUserSubject = new BehaviorSubject<any>(null);
   public currentUser$ = this.currentUserSubject.asObservable();
-
   constructor(private http: HttpClient) {
     this.loadUserFromLocalStorage();
-
-    this.verifySessionWithBackend();
   }
-
-  private verifySessionWithBackend(): void {
+  verifySessionWithBackend(): void {
     if (this.sessionCheckInProgress) return;
 
     this.sessionCheckInProgress = true;
@@ -84,7 +76,6 @@ export class AuthService {
       },
     });
   }
-
   private loadUserFromLocalStorage(): void {
     try {
       const storedUser = localStorage.getItem(this.USER_KEY);
@@ -99,10 +90,6 @@ export class AuthService {
     }
   }
 
-  /**
-   * Inicia sesión en el sistema
-   * El backend establece la cookie HTTP-only automáticamente
-   */
   login(credentials: LoginRequest): Observable<AuthResponse> {
     return this.http
       .post<AuthResponse>(`${this.API_URL}/auth/login`, credentials)
@@ -116,10 +103,6 @@ export class AuthService {
       );
   }
 
-  /**
-   * Registra un nuevo usuario en el sistema
-   * El backend establece la cookie HTTP-only automáticamente
-   */
   register(userData: RegisterRequest): Observable<AuthResponse> {
     return this.http
       .post<AuthResponse>(`${this.API_URL}/auth/register`, userData)
@@ -140,7 +123,6 @@ export class AuthService {
     this.authStateSubject.next(true);
   }
 
-  // Obtener la información del usuario logueado
   getUser(): any {
     return this.currentUserSubject.getValue();
   }

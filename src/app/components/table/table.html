@@ -61,13 +61,12 @@
             <ng-template #defaultCell>
               {{ getFieldValue(item, column.field) }}
             </ng-template>
-          </td>
-
-          <!-- Acciones -->
+          </td> <!-- Acciones -->
           <td *ngIf="config.actionColumn || actions.length > 0" class="action-column">
             <div class="action-buttons">
-              <button *ngFor="let action of actions" [ngClass]="'action-btn ' + (action.color || 'primary')"
-                (click)="executeAction(action, item)" [title]="action.label" [hidden]="!shouldShowAction(action, item)">
+              <button *ngFor="let action of getUniqueActions(item)"
+                [ngClass]="'action-btn ' + (action.color || 'primary')" (click)="executeAction(action, item)"
+                [title]="action.label">
                 <i [class]="action.icon"></i>
               </button>
             </div>
@@ -115,7 +114,6 @@
       <span>registros</span>
     </div>
   </div>
-
   <!-- Indicador de registros -->
   <div *ngIf="config.pagination" class="records-info">
     Mostrando {{ totalRecords === 0 ? 0 : (currentPage - 1) * pageSize + 1 }} -

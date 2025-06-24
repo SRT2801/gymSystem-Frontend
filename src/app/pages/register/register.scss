@@ -277,7 +277,7 @@ $transition: all 0.3s ease;
     transition: $transition;
 
     &:hover {
-      color: darken($primary-color, 15%);
+      color: color.adjust($primary-color, $lightness: -15%);
       text-decoration: underline;
     }
   }

@@ -225,7 +225,7 @@ $transition: all 0.3s ease;
 
       &:hover {
         text-decoration: underline;
-        color: darken($primary-color, 10%);
+        color: color.adjust($primary-color, $lightness: -10%);
       }
     }
 

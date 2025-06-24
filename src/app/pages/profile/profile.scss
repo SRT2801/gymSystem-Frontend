@@ -1,3 +1,5 @@
+@use "sass:color";
+
 .profile-container {
   max-width: 900px;
   margin: 0 auto;
@@ -102,7 +104,7 @@
   transition: background-color 0.3s ease;
 
   &:hover {
-    background-color: darken(#e94560, 10%);
+    background-color: color.adjust(#e94560, $lightness: -10%);
   }
 }
 

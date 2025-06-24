@@ -61,7 +61,13 @@ export class SidebarComponent {
   }
 
   logout() {
-    this.authService.logout();
-    this.router.navigate(['/login']);
+    this.authService.logout().subscribe({
+      next: () => {
+        this.router.navigate(['/home']);
+      },
+      error: () => {
+        this.router.navigate(['/home']);
+      },
+    });
   }
 }

@@ -32,16 +32,10 @@
           <div class="user-welcome">
             Hola, {{userName}}
           </div>
-          <div class="logout-btn-wrapper">
+          <div class="logout-btn-wrapper hide-on-mobile">
             <app-boton texto="Cerrar Sesión" tipo="light" size="medium" (buttonClick)="logout()"></app-boton>
           </div>
         </ng-container>
-
-        <button class="mobile-menu-btn" (click)="toggleMobileMenu()">
-          <span class="bar"></span>
-          <span class="bar"></span>
-          <span class="bar"></span>
-        </button>
       </div>
     </div>
   </div>
@@ -73,10 +67,6 @@
     <li class="mobile-auth" *ngIf="isAuthenticated">
       <div class="user-welcome-mobile">
         Hola, {{userName}}
-      </div>
-      <div class="mobile-btn-wrapper">
-        <app-boton texto="Cerrar Sesión" tipo="light" size="medium" [fullWidth]="true"
-          (buttonClick)="logout()"></app-boton>
       </div>
     </li>
   </ul>

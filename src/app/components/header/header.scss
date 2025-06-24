@@ -196,6 +196,12 @@ $transition-speed: 0.3s;
     .logout-btn-wrapper {
       margin-left: 0.5rem;
     }
+
+    .hide-on-mobile {
+      @media (max-width: 768px) {
+        display: none;
+      }
+    }
   }
 }
 

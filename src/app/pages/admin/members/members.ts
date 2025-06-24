@@ -23,14 +23,16 @@ export class MembersComponent implements OnInit {
   totalRecords: number = 0;
   currentPage: number = 1;
   pageSize: number = 10;
-
+  activeFilter: string = ''; // '' = todos, 'true' = activos, 'false' = inactivos
+  sortField?: string;
+  sortDirection?: string;
   tableConfig: TableConfig = {
     columns: [],
     pagination: true,
     sortable: true,
     selectable: true,
     actionColumn: true,
-    rowClass: (item: Member) => (item.active ? '' : 'inactive'),
+    rowClass: (item: Member) => (item.active ? 'row-active' : 'row-inactive'),
   };
 
   tableActions: TableAction[] = [];
@@ -59,20 +61,33 @@ export class MembersComponent implements OnInit {
   loadMembers(): void {
     this.loading = true;
 
-    this.memberService.getMembers(this.currentPage, this.pageSize).subscribe({
-      next: (response) => {
-        this.members = response.data;
-        this.totalRecords = response.pagination.total;
-      },
-      error: (error) => {
-        console.error('Error al cargar miembros:', error);
-      },
-      complete: () => {
-        this.loading = false;
-      },
-    });
-  }
+    // Convertir el filtro de string a boolean o undefined
+    let activeBoolean: boolean | undefined;
+    if (this.activeFilter === 'true') activeBoolean = true;
+    else if (this.activeFilter === 'false') activeBoolean = false;
+    // Si es cadena vacía, no se aplica filtro (undefined)
 
+    this.memberService
+      .getMembers(
+        this.currentPage,
+        this.pageSize,
+        activeBoolean,
+        this.sortField,
+        this.sortDirection
+      )
+      .subscribe({
+        next: (response) => {
+          this.members = response.data;
+          this.totalRecords = response.pagination.total;
+        },
+        error: (error) => {
+          console.error('Error al cargar miembros:', error);
+        },
+        complete: () => {
+          this.loading = false;
+        },
+      });
+  }
   setupTableActions(): void {
     const commonActions = this.tableService.getCommonActions();
 
@@ -85,6 +100,7 @@ export class MembersComponent implements OnInit {
         ...commonActions['edit'],
         action: (item: Member) => this.editMember(item),
       },
+      // Combinar activate/deactivate en un solo botón de toggle
       {
         ...commonActions['activate'],
         action: (item: Member) => this.toggleStatus(item),
@@ -99,48 +115,33 @@ export class MembersComponent implements OnInit {
       },
     ];
   }
-  /**
-   * Maneja el cambio de página o tamaño de página
-   * @param pageEvent Evento con página y tamaño
-   */
+
   onPageChange(pageEvent: { page: number; pageSize: number }): void {
     this.currentPage = pageEvent.page;
     this.pageSize = pageEvent.pageSize;
     this.loadMembers();
   }
 
-  /**
-   * Maneja el cambio de ordenamiento
-   * @param sort Información de ordenamiento
-   */
-  onSortChange(sort: any): void {
-    // Aquí se implementaría el ordenamiento
-    // Por ahora solo recargamos los datos
+  onSortChange(sort: { field: string; direction: 'asc' | 'desc' }): void {
+    this.sortField = sort.field;
+    this.sortDirection = sort.direction;
     this.loadMembers();
   }
 
-  /**
-   * Ver detalles de un miembro
-   * @param member Miembro a ver
-   */
+  onFilterChange(filterValue: string): void {
+    this.activeFilter = filterValue;
+    this.currentPage = 1; // Volver a la primera página al cambiar filtros
+    this.loadMembers();
+  }
+
   viewMember(member: Member): void {
     console.log('Ver miembro:', member);
-    // Aquí se implementaría la navegación a la vista detallada
   }
 
-  /**
-   * Editar un miembro
-   * @param member Miembro a editar
-   */
   editMember(member: Member): void {
     console.log('Editar miembro:', member);
-    // Aquí se implementaría la navegación al formulario de edición
   }
 
-  /**
-   * Cambiar el estado de un miembro
-   * @param member Miembro a cambiar estado
-   */
   toggleStatus(member: Member): void {
     this.loading = true;
 
@@ -157,17 +158,13 @@ export class MembersComponent implements OnInit {
     });
   }
 
-  /**
-   * Eliminar un miembro
-   * @param member Miembro a eliminar
-   */
   deleteMember(member: Member): void {
     if (confirm(`¿Estás seguro de eliminar al miembro ${member.name}?`)) {
       this.loading = true;
 
       this.memberService.deleteMember(member.id).subscribe({
         next: () => {
-          this.loadMembers(); // Recargar la lista
+          this.loadMembers();
         },
         error: (error) => {
           console.error('Error al eliminar miembro:', error);

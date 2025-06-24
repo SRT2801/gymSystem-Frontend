@@ -12,10 +12,26 @@ export class MemberService {
 
   constructor(private http: HttpClient) {}
 
-  getMembers(page: number = 1, limit: number = 10): Observable<MemberResponse> {
-    return this.http.get<MemberResponse>(
-      `${this.apiUrl}/members?page=${page}&limit=${limit}`
-    );
+  getMembers(
+    page: number = 1,
+    limit: number = 10,
+    active?: boolean,
+    sortField?: string,
+    sortDirection?: string
+  ): Observable<MemberResponse> {
+    let url = `${this.apiUrl}/members?page=${page}&limit=${limit}`;
+
+    // Agregar filtro de activo/inactivo si se especifica
+    if (active !== undefined) {
+      url += `&active=${active}`;
+    }
+
+    // Agregar ordenamiento si se especifica
+    if (sortField && sortDirection) {
+      url += `&sort=${sortField}&order=${sortDirection}`;
+    }
+
+    return this.http.get<MemberResponse>(url);
   }
 
   getMemberById(id: string): Observable<any> {

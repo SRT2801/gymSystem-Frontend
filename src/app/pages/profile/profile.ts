@@ -16,7 +16,7 @@ export class ProfileComponent {
     phone: '123-456-7890',
     membershipType: 'Premium',
     membershipExpiration: '2023-12-31',
-    profileImage: 'assets/img/user-profile.jpg',
+   
   };
 
   updateProfile() {

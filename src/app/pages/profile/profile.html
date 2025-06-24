@@ -1,52 +1,52 @@
 <div class="profile-container">
-    <div class="profile-header">
-        <div class="profile-avatar">
-            <img [src]="user.profileImage" alt="Foto de perfil" onError="this.src='assets/img/default-user.jpg'">
+  <div class="profile-header">
+    <div class="profile-avatar">
+
+    </div>
+    <h1>{{user.name}}</h1>
+    <span class="membership-badge">{{user.membershipType}}</span>
+  </div>
+
+  <div class="profile-content">
+    <div class="profile-section">
+      <h2>Información personal</h2>
+      <form (ngSubmit)="updateProfile()">
+        <div class="form-group">
+          <label for="name">Nombre completo</label>
+          <input type="text" id="name" name="name" [(ngModel)]="user.name" required>
         </div>
-        <h1>{{user.name}}</h1>
-        <span class="membership-badge">{{user.membershipType}}</span>
+
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input type="email" id="email" name="email" [(ngModel)]="user.email" required>
+        </div>
+
+        <div class="form-group">
+          <label for="phone">Teléfono</label>
+          <input type="tel" id="phone" name="phone" [(ngModel)]="user.phone">
+        </div>
+
+        <div class="form-buttons">
+          <button type="submit" class="btn-save">Guardar cambios</button>
+        </div>
+      </form>
     </div>
 
-    <div class="profile-content">
-        <div class="profile-section">
-            <h2>Información personal</h2>
-            <form (ngSubmit)="updateProfile()">
-                <div class="form-group">
-                    <label for="name">Nombre completo</label>
-                    <input type="text" id="name" name="name" [(ngModel)]="user.name" required>
-                </div>
-
-                <div class="form-group">
-                    <label for="email">Email</label>
-                    <input type="email" id="email" name="email" [(ngModel)]="user.email" required>
-                </div>
-
-                <div class="form-group">
-                    <label for="phone">Teléfono</label>
-                    <input type="tel" id="phone" name="phone" [(ngModel)]="user.phone">
-                </div>
-
-                <div class="form-buttons">
-                    <button type="submit" class="btn-save">Guardar cambios</button>
-                </div>
-            </form>
+    <div class="profile-section">
+      <h2>Membresía</h2>
+      <div class="membership-info">
+        <div class="info-item">
+          <span class="label">Tipo:</span>
+          <span class="value">{{user.membershipType}}</span>
         </div>
 
-        <div class="profile-section">
-            <h2>Membresía</h2>
-            <div class="membership-info">
-                <div class="info-item">
-                    <span class="label">Tipo:</span>
-                    <span class="value">{{user.membershipType}}</span>
-                </div>
-
-                <div class="info-item">
-                    <span class="label">Vencimiento:</span>
-                    <span class="value">{{user.membershipExpiration}}</span>
-                </div>
-
-                <button class="btn-renew">Renovar membresía</button>
-            </div>
+        <div class="info-item">
+          <span class="label">Vencimiento:</span>
+          <span class="value">{{user.membershipExpiration}}</span>
         </div>
+
+        <button class="btn-renew">Renovar membresía</button>
+      </div>
     </div>
+  </div>
 </div>

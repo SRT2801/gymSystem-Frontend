@@ -60,3 +60,47 @@
     font-size: 1.1rem;
   }
 }
+
+/* Responsive styles para móviles */
+@media screen and (max-width: 768px) {
+  .admin-container {
+    padding: 1rem;
+  }
+
+  .admin-header {
+    margin-bottom: 1.5rem;
+
+    h1 {
+      font-size: 1.6rem;
+    }
+  }
+
+  .welcome-card {
+    flex-direction: column;
+    text-align: center;
+    padding: 1.5rem;
+
+    .welcome-icon {
+      margin-right: 0;
+      margin-bottom: 1rem;
+    }
+
+    .welcome-message {
+      h2 {
+        font-size: 1.4rem;
+      }
+
+      p {
+        font-size: 0.9rem;
+      }
+    }
+  }
+
+  .admin-info {
+    padding: 0.8rem;
+
+    p {
+      font-size: 0.9rem;
+    }
+  }
+}

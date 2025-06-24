@@ -1,6 +1,9 @@
 <div class="sidebar">
   <div class="sidebar-header">
-    <h2>GYM System</h2>
+    <h2>POWERGYMFIT</h2>
+    <div class="sidebar-close" (click)="closeSidebar()">
+      <i class="material-icons">close</i>
+    </div>
   </div>
 
   <div class="user-info">
@@ -13,7 +16,7 @@
   <nav class="sidebar-nav">
     <ul>
       <li *ngFor="let item of filteredMenuItems" [routerLinkActive]="['active']">
-        <a [routerLink]="item.route">
+        <a [routerLink]="item.route" (click)="closeSidebarOnNavigate()">
           <i class="material-icons">{{item.icon}}</i>
           <span>{{item.title}}</span>
         </a>

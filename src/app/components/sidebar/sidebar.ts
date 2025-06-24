@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, EventEmitter, Output } from '@angular/core';
 import { RouterModule, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../../services/auth.service';
@@ -12,6 +12,7 @@ import { AuthService } from '../../services/auth.service';
 })
 export class SidebarComponent {
   @Input() userRole: string = 'user';
+  @Output() sidebarToggle = new EventEmitter<boolean>();
 
   menuItems: { title: string; route: string; icon: string; roles: string[] }[] =
     [
@@ -69,5 +70,17 @@ export class SidebarComponent {
         this.router.navigate(['/home']);
       },
     });
+  }
+
+  // Métodos para manejo del sidebar en móvil
+  closeSidebar() {
+    this.sidebarToggle.emit(false);
+  }
+
+  closeSidebarOnNavigate() {
+    // En pantallas pequeñas, cerrar el sidebar al navegar
+    if (window.innerWidth <= 768) {
+      this.closeSidebar();
+    }
   }
 }

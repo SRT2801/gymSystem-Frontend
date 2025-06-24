@@ -13,11 +13,21 @@
   padding: 20px;
   border-bottom: 1px solid #2d2d42;
   text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 
   h2 {
     margin: 0;
     font-size: 1.5rem;
     font-weight: 600;
+  }
+
+  .sidebar-close {
+    display: none; /* Se mostrará solo en móvil */
+    cursor: pointer;
+    color: #e94560;
+    font-size: 24px;
   }
 }
 
@@ -117,6 +127,42 @@
     i {
       margin-right: 10px;
       color: #e94560;
+    }
+  }
+}
+
+/* Media Queries para móvil */
+@media screen and (max-width: 768px) {
+  .sidebar {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .sidebar-header {
+    .sidebar-close {
+      display: block;
+    }
+  }
+
+  .sidebar-nav {
+    li {
+      a {
+        padding: 15px 20px; /* Botones más grandes para mejor experiencia táctil */
+
+        i {
+          font-size: 24px; /* Iconos más grandes */
+        }
+
+        span {
+          font-size: 1rem; /* Texto más grande */
+        }
+      }
+    }
+  }
+
+  .sidebar-footer {
+    a {
+      padding: 15px; /* Botón de cerrar sesión más grande */
     }
   }
 }

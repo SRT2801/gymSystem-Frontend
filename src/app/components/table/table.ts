@@ -30,7 +30,7 @@ export class TableComponent implements OnChanges {
   @Input() actions: TableAction[] = []; // Acciones disponibles
   @Input() customTemplates: { [key: string]: TemplateRef<any> } = {}; // Templates personalizados
 
-  @Output() pageChange = new EventEmitter<number>(); // Evento al cambiar de página
+  @Output() pageChange = new EventEmitter<{ page: number; pageSize: number }>(); // Evento al cambiar de página o tamaño
   @Output() sortChange = new EventEmitter<any>(); // Evento al ordenar
   @Output() rowSelect = new EventEmitter<any>(); // Evento al seleccionar fila
   @Output() rowAction = new EventEmitter<{ action: string; item: any }>(); // Evento para acción en fila
@@ -63,14 +63,29 @@ export class TableComponent implements OnChanges {
 
     this.sortChange.emit(this.currentSort);
   }
-
   /**
    * Cambia de página
    * @param page Número de página
    */
   changePage(page: number): void {
     this.currentPage = page;
-    this.pageChange.emit(page);
+    this.pageChange.emit({ page: this.currentPage, pageSize: this.pageSize });
+  }
+
+  /**
+   * Cambia el tamaño de página y recalcula la página actual
+   */ onPageSizeChange(): void {
+    // Calcular la posición del primer registro en la página actual
+    const firstRecord = (this.currentPage - 1) * this.pageSize + 1;
+
+    // Calcular la nueva página que contendría ese registro
+    this.currentPage = Math.floor((firstRecord - 1) / this.pageSize) + 1;
+
+    // Emitir el evento con la nueva página y el nuevo tamaño
+    this.pageChange.emit({
+      page: this.currentPage,
+      pageSize: parseInt(this.pageSize.toString()),
+    });
   }
 
   /**

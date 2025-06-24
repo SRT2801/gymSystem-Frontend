@@ -15,17 +15,14 @@ import { TableAction, TableConfig } from '../../../models/table.model';
   styleUrls: ['./members.scss'],
 })
 export class MembersComponent implements OnInit {
-
   @ViewChild('statusTemplate', { static: true })
   statusTemplate!: TemplateRef<any>;
-
 
   members: Member[] = [];
   loading: boolean = true;
   totalRecords: number = 0;
   currentPage: number = 1;
   pageSize: number = 10;
-
 
   tableConfig: TableConfig = {
     columns: [],
@@ -36,9 +33,7 @@ export class MembersComponent implements OnInit {
     rowClass: (item: Member) => (item.active ? '' : 'inactive'),
   };
 
-
   tableActions: TableAction[] = [];
-
 
   customTemplates: { [key: string]: TemplateRef<any> } = {};
 
@@ -48,18 +43,14 @@ export class MembersComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-
     this.tableConfig.columns = this.tableService.getMembersTableColumns();
 
-
     this.setupTableActions();
-
 
     this.loadMembers();
   }
 
   ngAfterViewInit() {
-
     this.customTemplates = {
       statusTemplate: this.statusTemplate,
     };
@@ -82,10 +73,8 @@ export class MembersComponent implements OnInit {
     });
   }
 
-   setupTableActions(): void {
-
+  setupTableActions(): void {
     const commonActions = this.tableService.getCommonActions();
-
 
     this.tableActions = [
       {
@@ -110,13 +99,13 @@ export class MembersComponent implements OnInit {
       },
     ];
   }
-
   /**
-   * Maneja el cambio de página
-   * @param page Número de página
+   * Maneja el cambio de página o tamaño de página
+   * @param pageEvent Evento con página y tamaño
    */
-  onPageChange(page: number): void {
-    this.currentPage = page;
+  onPageChange(pageEvent: { page: number; pageSize: number }): void {
+    this.currentPage = pageEvent.page;
+    this.pageSize = pageEvent.pageSize;
     this.loadMembers();
   }
 

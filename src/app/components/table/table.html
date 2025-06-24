@@ -76,35 +76,49 @@
       </tbody>
     </table>
   </div>
-
   <!-- Paginación -->
-  <div *ngIf="config.pagination && totalPages > 1" class="pagination">
-    <button [disabled]="currentPage === 1" (click)="changePage(1)" class="pagination-btn">
-      <i class="fa fa-angle-double-left"></i>
-    </button>
+  <div *ngIf="config.pagination" class="pagination-container">
+    <div class="pagination-controls">
+      <button [disabled]="currentPage === 1" (click)="changePage(1)" class="pagination-btn">
+        <i class="fa fa-angle-double-left"></i>
+      </button>
 
-    <button [disabled]="currentPage === 1" (click)="changePage(currentPage - 1)" class="pagination-btn">
-      <i class="fa fa-angle-left"></i>
-    </button>
+      <button [disabled]="currentPage === 1" (click)="changePage(currentPage - 1)" class="pagination-btn">
+        <i class="fa fa-angle-left"></i>
+      </button>
 
-    <button *ngFor="let page of pages"
-      [ngClass]="{'pagination-btn': true, 'active': page === currentPage, 'dots': page === -1}" [disabled]="page === -1"
-      (click)="page !== -1 && changePage(page)">
-      {{ page === -1 ? '...' : page }}
-    </button>
+      <button *ngFor="let page of pages"
+        [ngClass]="{'pagination-btn': true, 'active': page === currentPage, 'dots': page === -1}"
+        [disabled]="page === -1" (click)="page !== -1 && changePage(page)">
+        {{ page === -1 ? '...' : page }}
+      </button>
 
-    <button [disabled]="currentPage === totalPages" (click)="changePage(currentPage + 1)" class="pagination-btn">
-      <i class="fa fa-angle-right"></i>
-    </button>
+      <button [disabled]="currentPage === totalPages" (click)="changePage(currentPage + 1)" class="pagination-btn">
+        <i class="fa fa-angle-right"></i>
+      </button>
 
-    <button [disabled]="currentPage === totalPages" (click)="changePage(totalPages)" class="pagination-btn">
-      <i class="fa fa-angle-double-right"></i>
-    </button>
+      <button [disabled]="currentPage === totalPages" (click)="changePage(totalPages)" class="pagination-btn">
+        <i class="fa fa-angle-double-right"></i>
+      </button>
+    </div>
+
+    <!-- Control de tamaño de página -->
+    <div class="page-size-control">
+      <span>Mostrar</span>
+      <select [(ngModel)]="pageSize" (change)="onPageSizeChange()">
+        <option [value]="5">5</option>
+        <option [value]="10">10</option>
+        <option [value]="25">25</option>
+        <option [value]="50">50</option>
+        <option [value]="100">100</option>
+      </select>
+      <span>registros</span>
+    </div>
   </div>
 
   <!-- Indicador de registros -->
   <div *ngIf="config.pagination" class="records-info">
-    Mostrando {{ (currentPage - 1) * pageSize + 1 }} -
+    Mostrando {{ totalRecords === 0 ? 0 : (currentPage - 1) * pageSize + 1 }} -
     {{ currentPage * pageSize > totalRecords ? totalRecords : currentPage * pageSize }}
     de {{ totalRecords }} registros
   </div>

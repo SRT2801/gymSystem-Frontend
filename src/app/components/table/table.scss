@@ -168,44 +168,74 @@ $transition-speed: 0.3s;
   }
 }
 
-.pagination {
+.pagination-container {
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
   padding: 15px;
-  gap: 5px;
+  flex-wrap: wrap;
+  gap: 10px;
 
-  .pagination-btn {
-    min-width: 35px;
-    height: 35px;
-    border: 1px solid $border-color;
-    background-color: #fff;
-    cursor: pointer;
+  .pagination-controls {
+    display: flex;
+    gap: 5px;
+
+    .pagination-btn {
+      min-width: 35px;
+      height: 35px;
+      border: 1px solid $border-color;
+      background-color: #fff;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 4px;
+      transition: all $transition-speed;
+
+      &:hover:not(:disabled) {
+        border-color: $primary-color;
+        color: $primary-color;
+      }
+
+      &.active {
+        background-color: $primary-color;
+        color: white;
+        border-color: $primary-color;
+      }
+
+      &:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+
+      &.dots {
+        border: none;
+        background: none;
+      }
+    }
+  }
+
+  .page-size-control {
     display: flex;
     align-items: center;
-    justify-content: center;
-    border-radius: 4px;
-    transition: all $transition-speed;
+    gap: 10px;
 
-    &:hover:not(:disabled) {
-      border-color: $primary-color;
-      color: $primary-color;
+    span {
+      color: #666;
+      font-size: 0.9rem;
     }
 
-    &.active {
-      background-color: $primary-color;
-      color: white;
-      border-color: $primary-color;
-    }
+    select {
+      padding: 5px 10px;
+      border: 1px solid $border-color;
+      border-radius: 4px;
+      background-color: white;
+      cursor: pointer;
 
-    &:disabled {
-      opacity: 0.5;
-      cursor: not-allowed;
-    }
-
-    &.dots {
-      border: none;
-      background: none;
+      &:focus {
+        outline: none;
+        border-color: $primary-color;
+      }
     }
   }
 }

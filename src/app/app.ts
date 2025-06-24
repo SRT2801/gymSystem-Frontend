@@ -1,12 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { RouterOutlet, Router } from '@angular/router';
-import { Header } from './components/header/header';
-import { Footer } from './components/footer/footer';
 import { AuthService } from './services/auth.service';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, Header, Footer],
+  imports: [RouterOutlet],
   templateUrl: './app.html',
   styleUrl: './app.scss',
 })
@@ -16,9 +14,7 @@ export class App implements OnInit {
   constructor(private authService: AuthService, private router: Router) {}
 
   ngOnInit() {
-    
     if (this.authService.isAuthenticated()) {
-
       const redirectUrl = this.authService.getRedirectUrl();
       if (
         window.location.pathname === '/' ||
@@ -27,7 +23,6 @@ export class App implements OnInit {
         this.router.navigate([redirectUrl]);
       }
     }
-
 
     this.authService.checkSession().subscribe();
   }

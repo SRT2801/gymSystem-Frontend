@@ -1,0 +1,111 @@
+<div class="table-container">
+  <!-- Loading Overlay -->
+  <div *ngIf="loading" class="loading-overlay">
+    <div class="spinner"></div>
+  </div>
+
+  <div class="table-wrapper">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <!-- Checkbox para seleccionar todas las filas -->
+          <th *ngIf="config.selectable" class="select-column">
+            <input type="checkbox" [checked]="areAllSelected()" (change)="toggleAllRows($event)">
+          </th>
+
+          <!-- Columnas de datos -->
+          <th *ngFor="let column of config.columns"
+            [ngClass]="{'sortable': column.sortable, 'sorted': currentSort?.field === column.field}"
+            [style.width]="column.width" (click)="sort(column)">
+            {{ column.header }}
+
+            <span *ngIf="column.sortable" class="sort-icon">
+              <i *ngIf="currentSort?.field !== column.field" class="fa fa-sort"></i>
+              <i *ngIf="currentSort?.field === column.field && currentSort?.direction === 'asc'"
+                class="fa fa-sort-up"></i>
+              <i *ngIf="currentSort?.field === column.field && currentSort?.direction === 'desc'"
+                class="fa fa-sort-down"></i>
+            </span>
+          </th>
+
+          <!-- Columna de acciones -->
+          <th *ngIf="config.actionColumn || actions.length > 0" class="action-column">Acciones</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <!-- Mensaje cuando no hay datos -->
+        <tr *ngIf="data.length === 0 && !loading">
+          <td [attr.colspan]="config.columns.length + (config.selectable ? 1 : 0) + (config.actionColumn ? 1 : 0)"
+            class="no-data">
+            No se encontraron datos
+          </td>
+        </tr>
+
+        <!-- Filas de datos -->
+        <tr *ngFor="let item of data" [ngClass]="getRowClass(item)">
+          <!-- Checkbox de selección -->
+          <td *ngIf="config.selectable" class="select-column">
+            <input type="checkbox" [checked]="selectedRows.includes(item)" (change)="toggleRowSelection(item, $event)">
+          </td>
+
+          <!-- Celdas de datos -->
+          <td *ngFor="let column of config.columns" [ngClass]="column.class">
+            <!-- Renderizado por template personalizado -->
+            <ng-container *ngIf="column.template && customTemplates[column.template]; else defaultCell">
+              <ng-container
+                *ngTemplateOutlet="customTemplates[column.template]; context: { $implicit: item, field: column.field }"></ng-container>
+            </ng-container>
+
+            <!-- Renderizado por defecto -->
+            <ng-template #defaultCell>
+              {{ getFieldValue(item, column.field) }}
+            </ng-template>
+          </td>
+
+          <!-- Acciones -->
+          <td *ngIf="config.actionColumn || actions.length > 0" class="action-column">
+            <div class="action-buttons">
+              <button *ngFor="let action of actions" [ngClass]="'action-btn ' + (action.color || 'primary')"
+                (click)="executeAction(action, item)" [title]="action.label" [hidden]="!shouldShowAction(action, item)">
+                <i [class]="action.icon"></i>
+              </button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Paginación -->
+  <div *ngIf="config.pagination && totalPages > 1" class="pagination">
+    <button [disabled]="currentPage === 1" (click)="changePage(1)" class="pagination-btn">
+      <i class="fa fa-angle-double-left"></i>
+    </button>
+
+    <button [disabled]="currentPage === 1" (click)="changePage(currentPage - 1)" class="pagination-btn">
+      <i class="fa fa-angle-left"></i>
+    </button>
+
+    <button *ngFor="let page of pages"
+      [ngClass]="{'pagination-btn': true, 'active': page === currentPage, 'dots': page === -1}" [disabled]="page === -1"
+      (click)="page !== -1 && changePage(page)">
+      {{ page === -1 ? '...' : page }}
+    </button>
+
+    <button [disabled]="currentPage === totalPages" (click)="changePage(currentPage + 1)" class="pagination-btn">
+      <i class="fa fa-angle-right"></i>
+    </button>
+
+    <button [disabled]="currentPage === totalPages" (click)="changePage(totalPages)" class="pagination-btn">
+      <i class="fa fa-angle-double-right"></i>
+    </button>
+  </div>
+
+  <!-- Indicador de registros -->
+  <div *ngIf="config.pagination" class="records-info">
+    Mostrando {{ (currentPage - 1) * pageSize + 1 }} -
+    {{ currentPage * pageSize > totalRecords ? totalRecords : currentPage * pageSize }}
+    de {{ totalRecords }} registros
+  </div>
+</div>

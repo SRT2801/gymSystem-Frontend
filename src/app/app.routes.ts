@@ -11,7 +11,6 @@ import { PublicLayoutComponent } from './layouts/public-layout/public-layout';
 export const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
 
-
   {
     path: '',
     component: PublicLayoutComponent,
@@ -22,7 +21,6 @@ export const routes: Routes = [
     ],
   },
 
-
   {
     path: '',
     component: AuthenticatedLayoutComponent,
@@ -31,6 +29,14 @@ export const routes: Routes = [
       {
         path: 'admin',
         component: AdminComponent,
+        canActivate: [AdminGuard],
+      },
+      {
+        path: 'admin/members',
+        loadComponent: () =>
+          import('./pages/admin/members/members').then(
+            (m) => m.MembersComponent
+          ),
         canActivate: [AdminGuard],
       },
       {
@@ -45,7 +51,6 @@ export const routes: Routes = [
         loadComponent: () =>
           import('./pages/profile/profile').then((m) => m.ProfileComponent),
       },
-
     ],
   },
 

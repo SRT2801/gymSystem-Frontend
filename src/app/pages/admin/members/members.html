@@ -1,0 +1,42 @@
+<div class="members-container">
+    <div class="members-header">
+        <h1>Gestión de Miembros</h1>
+        <button class="add-button">
+            <i class="fas fa-plus"></i> Nuevo Miembro
+        </button>
+    </div>
+
+    <div class="members-content">
+        <div class="search-filters">
+            <div class="search-box">
+                <input type="text" placeholder="Buscar miembros...">
+                <button class="search-button">
+                    <i class="fas fa-search"></i>
+                </button>
+            </div>
+
+            <div class="filters">
+                <select>
+                    <option value="">Estado: Todos</option>
+                    <option value="active">Activos</option>
+                    <option value="inactive">Inactivos</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Tabla de miembros -->
+        <app-table [data]="members" [config]="tableConfig" [loading]="loading" [totalRecords]="totalRecords"
+            [actions]="tableActions" [customTemplates]="customTemplates" (pageChange)="onPageChange($event)"
+            (sortChange)="onSortChange($event)">
+        </app-table>
+    </div>
+
+    <!-- Templates personalizados para la tabla -->
+    <ng-template #statusTemplate let-item let-field="field">
+        <div class="status-indicator">
+            <span class="status-badge" [ngClass]="item[field] ? 'active' : 'inactive'">
+                {{ item[field] ? 'Activo' : 'Inactivo' }}
+            </span>
+        </div>
+    </ng-template>
+</div>

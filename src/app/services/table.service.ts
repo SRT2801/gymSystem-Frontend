@@ -5,7 +5,6 @@ import { TableAction, TableColumn } from '../models/table.model';
   providedIn: 'root',
 })
 export class TableService {
-
   getCommonActions(): { [key: string]: TableAction } {
     return {
       view: {
@@ -27,22 +26,21 @@ export class TableService {
         action: () => {},
       },
       activate: {
-        icon: 'fa fa-toggle-on',
+        icon: 'fa fa-toggle-off',
         label: 'Activar',
-        color: 'success',
+        color: 'danger',
         showIf: (item: any) => !item.active,
         action: () => {},
       },
       deactivate: {
-        icon: 'fa fa-toggle-off',
+        icon: 'fa fa-toggle-on',
         label: 'Desactivar',
-        color: 'danger',
+        color: 'success',
         showIf: (item: any) => item.active,
         action: () => {},
       },
     };
   }
-
 
   formatDate(dateString: string): string {
     if (!dateString) return '';
@@ -54,7 +52,6 @@ export class TableService {
       return dateString;
     }
   }
-
 
   formatBoolean(
     value: boolean,
@@ -68,7 +65,6 @@ export class TableService {
     return value ? 'Activo' : 'Inactivo';
   }
 
-  
   getMembersTableColumns(): TableColumn[] {
     return [
       { header: 'Nombre', field: 'name', sortable: true },

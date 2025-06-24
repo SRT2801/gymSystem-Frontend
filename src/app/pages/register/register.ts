@@ -84,53 +84,60 @@ export class Register implements AfterViewInit {
               window.scrollTo(0, 0);
             });
           }, 2000);
-        },        error: (err) => {
+        },
+        error: (err) => {
           console.error('Error de registro:', err);
           this.isLoading = false;
-          this.registerSuccess = false;          // Capturar errores específicos según la respuesta del backend
+          this.registerSuccess = false;
           if (err.status === 409) {
             if (err.error && err.error.message) {
-              // Mostrar el mensaje exacto del backend para mayor claridad
               this.registerError = err.error.message;
 
-              // Si el backend no proporciona un mensaje suficientemente claro, lo mejoramos
               if (!this.registerError) {
-                if (err.error.field === 'email' || (err.error.message && err.error.message.includes('email'))) {
-                  this.registerError = 
+                if (
+                  err.error.field === 'email' ||
+                  (err.error.message && err.error.message.includes('email'))
+                ) {
+                  this.registerError =
                     'El email ya está registrado. Por favor utiliza otro email.';
-                } else if (err.error.field === 'documentId' || (err.error.message && err.error.message.includes('documentId'))) {
-                  this.registerError = 
+                } else if (
+                  err.error.field === 'documentId' ||
+                  (err.error.message &&
+                    err.error.message.includes('documentId'))
+                ) {
+                  this.registerError =
                     'El documento de identidad ya está registrado. Por favor verifica tus datos.';
                 } else {
-                  this.registerError = 
+                  this.registerError =
                     'Ya existe una cuenta con estos datos. Por favor verifica la información.';
                 }
               }
             } else {
               this.registerError =
                 'Ya existe una cuenta con estos datos. Por favor verifica la información.';
-            }          } else if (err.status === 0) {
+            }
+          } else if (err.status === 0) {
             this.registerError =
               'No se pudo conectar con el servidor. Verifica tu conexión a internet.';
           } else if (err.status === 400 && err.error) {
-            // Error de validación del servidor - mostrar el mensaje exacto
             if (err.error.message) {
               this.registerError = err.error.message;
             } else if (typeof err.error === 'string') {
               this.registerError = err.error;
             } else {
-              // Si hay errores de validación en formato de campo específico
               const errorFields = Object.keys(err.error);
               if (errorFields.length > 0) {
-                // Construir un mensaje amigable con todos los errores
-                const errorMessages = errorFields.map(field => {
+                const errorMessages = errorFields.map((field) => {
                   const fieldName = this.getFieldDisplayName(field);
                   const errorMsg = err.error[field];
                   return `${fieldName}: ${errorMsg}`;
                 });
-                this.registerError = `Por favor corrige los siguientes errores: ${errorMessages.join(', ')}`;
+                this.registerError = `Por favor corrige los siguientes errores: ${errorMessages.join(
+                  ', '
+                )}`;
               } else {
-                this.registerError = 'Error de validación en el formulario. Por favor verifica tus datos.';
+                this.registerError =
+                  'Error de validación en el formulario. Por favor verifica tus datos.';
               }
             }
           } else {
@@ -211,7 +218,6 @@ export class Register implements AfterViewInit {
     return '';
   }
 
-  // Función para obtener nombres amigables de los campos en mensajes de error
   getFieldDisplayName(fieldName: string): string {
     const fieldMap: Record<string, string> = {
       name: 'Nombre',
@@ -220,9 +226,9 @@ export class Register implements AfterViewInit {
       confirmPassword: 'Confirmar Contraseña',
       phone: 'Teléfono',
       documentId: 'Documento de Identidad',
-      birthDate: 'Fecha de Nacimiento'
+      birthDate: 'Fecha de Nacimiento',
     };
-    
+
     return fieldMap[fieldName] || fieldName;
   }
 

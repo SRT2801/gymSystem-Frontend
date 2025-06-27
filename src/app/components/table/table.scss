@@ -30,10 +30,7 @@ $stripe-highlight: rgba(255, 77, 48, 0.03);
   padding: 0;
   overflow: visible;
 
-  &:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 15px 35px $shadow-color, 0 8px 20px rgba(0, 0, 0, 0.1);
-  }
+  // Eliminamos el efecto hover de la tabla
 }
 
 .table-wrapper {
@@ -99,13 +96,7 @@ $stripe-highlight: rgba(255, 77, 48, 0.03);
       cursor: pointer;
       transition: all $transition-speed;
 
-      &:hover {
-        background: linear-gradient(
-          135deg,
-          color.adjust(#ff4d30, $lightness: -5%) 0%,
-          color.adjust(#ff7a5c, $lightness: -5%) 100%
-        );
-      }
+      // Mantenemos el efecto hover para los encabezados ordenables para indicar interactividad
 
       &.sorted {
         background: linear-gradient(
@@ -174,12 +165,7 @@ $stripe-highlight: rgba(255, 77, 48, 0.03);
         }
       }
 
-      &:hover {
-        background-color: $row-hover-bg;
-        transform: translateY(-2px);
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-        z-index: 1;
-      }
+      // Eliminamos el efecto hover de las filas de la tabla
 
       &.selected {
         background-color: $selected-color;

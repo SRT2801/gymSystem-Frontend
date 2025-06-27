@@ -1,12 +1,11 @@
 <div class="authenticated-layout">
 
-  <app-sidebar [userRole]="userRole" [class.active]="sidebarVisible"
-    (sidebarToggle)="sidebarVisible = $event"></app-sidebar>
-
+  <app-sidebar [userRole]="userRole" [class.active]="sidebarVisible" [collapsed]="sidebarCollapsed"
+    (collapsedChange)="onSidebarCollapsedChange($event)" (sidebarToggle)="sidebarVisible = $event"></app-sidebar>
 
   <div class="sidebar-overlay" [class.active]="sidebarVisible" (click)="closeSidebar()"></div>
 
-  <div class="main-content">
+  <div class="main-content" [class.sidebar-collapsed]="sidebarCollapsed">
     <app-header></app-header>
     <div class="content-container">
       <router-outlet></router-outlet>

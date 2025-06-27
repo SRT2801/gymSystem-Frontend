@@ -16,6 +16,7 @@ import { CommonModule } from '@angular/common';
 export class AuthenticatedLayoutComponent implements OnInit {
   userRole: string = 'user';
   sidebarVisible: boolean = false;
+  sidebarCollapsed: boolean = false;
 
   constructor(private authService: AuthService) {}
 
@@ -25,6 +26,13 @@ export class AuthenticatedLayoutComponent implements OnInit {
     } else {
       this.userRole = 'user';
     }
+
+    // En escritorio mostrar sidebar por defecto
+    this.sidebarVisible = window.innerWidth > 768;
+
+    // Comprobar si hay una preferencia guardada para el sidebar colapsado
+    const savedCollapsedState = localStorage.getItem('sidebarCollapsed');
+    this.sidebarCollapsed = savedCollapsedState === 'true';
   }
 
   toggleSidebar() {
@@ -33,5 +41,10 @@ export class AuthenticatedLayoutComponent implements OnInit {
 
   closeSidebar() {
     this.sidebarVisible = false;
+  }
+
+  onSidebarCollapsedChange(collapsed: boolean) {
+    this.sidebarCollapsed = collapsed;
+    localStorage.setItem('sidebarCollapsed', String(collapsed));
   }
 }

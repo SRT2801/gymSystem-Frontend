@@ -1,25 +1,41 @@
+$sidebar-width: 250px;
+$sidebar-collapsed-width: 70px;
+
 .authenticated-layout {
   display: flex;
-  height: 100vh;
+  min-height: 100vh;
   width: 100%;
-  overflow: hidden;
-  margin: 0;
-  padding: 0;
-  position: relative; /* Para posicionamiento del sidebar en móvil */
+  position: relative;
+  background-color: #f5f5f5;
+  overflow-x: hidden;
 }
 
 .main-content {
   flex: 1;
   display: flex;
   flex-direction: column;
-  overflow: hidden;
   margin: 0;
   padding: 0;
-  transition: margin-left 0.3s ease; /* Suavizar la transición cuando se oculta/muestra el sidebar */
+  transition: all 0.3s ease;
+  width: 100%;
+
+  @media screen and (min-width: 769px) {
+    margin-left: $sidebar-width;
+    width: calc(100% - $sidebar-width);
+
+    &.sidebar-collapsed {
+      margin-left: $sidebar-collapsed-width;
+      width: calc(100% - $sidebar-collapsed-width);
+    }
+  }
 }
 
 /* Asegurar que no haya espacios entre el header y el contenido */
 app-header {
+  position: sticky;
+  top: 0;
+  width: 100%;
+  z-index: 10;
   margin-bottom: 0;
   padding-bottom: 0;
   display: block;
@@ -28,20 +44,27 @@ app-header {
 .content-container {
   flex: 1;
   padding: 20px;
-  overflow-y: auto;
   background-color: #f5f5f5;
-  margin-top: 0; /* Elimina cualquier margen superior */
+  margin-top: 0;
+  width: 100%;
+  min-height: calc(100vh - 64px);
+  overflow-y: auto;
 }
 
 /* Botón de sidebar - oculto por defecto en desktop */
 .sidebar-toggle {
-  display: none; /* Oculto por defecto en todos los tamaños de pantalla */
+  display: none;
 }
 
 /* Responsive styles */
 @media screen and (max-width: 768px) {
   .authenticated-layout {
     flex-direction: column;
+  }
+
+  .main-content {
+    margin-left: 0 !important;
+    width: 100% !important;
   }
 
   app-sidebar {
@@ -60,6 +83,7 @@ app-header {
   app-sidebar.active {
     transform: translateX(0);
   }
+
   .sidebar-toggle {
     position: fixed;
     bottom: 20px;
@@ -68,7 +92,7 @@ app-header {
     height: 50px;
     background-color: #e94560;
     border-radius: 50%;
-    display: flex; /* Sobreescribe el display:none del selector global */
+    display: flex;
     justify-content: center;
     align-items: center;
     color: white;

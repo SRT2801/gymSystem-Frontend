@@ -28,9 +28,7 @@ $stripe-highlight: rgba(255, 77, 48, 0.03);
   border-radius: 12px;
   box-shadow: 0 10px 30px $shadow-color, 0 5px 15px rgba(0, 0, 0, 0.05);
   padding: 0;
-  overflow: hidden;
-  margin-bottom: 0;
-  transition: transform 0.4s ease, box-shadow 0.4s ease;
+  overflow: visible;
 
   &:hover {
     transform: translateY(-5px);
@@ -41,6 +39,7 @@ $stripe-highlight: rgba(255, 77, 48, 0.03);
 .table-wrapper {
   width: 100%;
   overflow-x: auto;
+  overflow-y: visible;
   border-radius: 12px;
   scrollbar-width: thin;
   scrollbar-color: $primary-color $table-bg;

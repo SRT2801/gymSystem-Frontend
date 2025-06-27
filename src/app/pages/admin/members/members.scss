@@ -15,6 +15,9 @@ $shadow-color: rgba(255, 77, 48, 0.2); // Definiendo la variable shadow-color
 .members-container {
   padding: 20px;
   width: 100%;
+  height: auto;
+  min-height: 100%;
+  overflow: visible;
 }
 
 .members-header {

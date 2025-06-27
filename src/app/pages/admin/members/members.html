@@ -39,4 +39,82 @@
       </span>
     </div>
   </ng-template>
+
+  <!-- Modal para editar miembros -->
+  <app-modal [isOpen]="isEditModalOpen" [title]="'Editar Miembro'" [size]="'md'" (closeModal)="closeEditModal()">
+    <!-- Resumen del miembro -->
+    <div *ngIf="selectedMember" class="member-summary">
+      <div class="member-avatar">
+        <i class="fas fa-user-circle"></i>
+        <span class="status-dot" [ngClass]="{'active': selectedMember.active}"></span>
+      </div>
+      <div class="member-info">
+        <h3>{{selectedMember.name}}</h3>
+        <p>Miembro desde: {{selectedMember.registrationDate}}</p>
+      </div>
+    </div>
+
+    <!-- Formulario de edición -->
+    <form [formGroup]="memberForm" (ngSubmit)="saveMember()">
+      <div class="edit-form-container">
+        <!-- Nombre completo - Primera columna -->
+        <div class="form-group">
+          <label for="name"><i class="fas fa-user label-icon"></i> Nombre completo</label>
+          <input id="name" type="text" formControlName="name" placeholder="Nombre completo" class="form-control">
+          <div *ngIf="memberForm.get('name')?.invalid && memberForm.get('name')?.touched" class="error-message">
+            El nombre es obligatorio
+          </div>
+        </div>
+
+        <!-- Email - Segunda columna -->
+        <div class="form-group">
+          <label for="email"><i class="fas fa-envelope label-icon"></i> Correo electrónico</label>
+          <input id="email" type="email" formControlName="email" placeholder="Correo electrónico" class="form-control">
+          <div *ngIf="memberForm.get('email')?.invalid && memberForm.get('email')?.touched" class="error-message">
+            Ingrese un correo electrónico válido
+          </div>
+        </div>
+
+        <!-- Teléfono - Primera columna -->
+        <div class="form-group">
+          <label for="phone"><i class="fas fa-phone-alt label-icon"></i> Teléfono</label>
+          <input id="phone" type="tel" formControlName="phone" placeholder="Teléfono" class="form-control">
+        </div>
+
+        <!-- DNI - Segunda columna -->
+        <div class="form-group">
+          <label for="documentId"><i class="fas fa-id-card label-icon"></i> Documento de identidad</label>
+          <input id="documentId" type="text" formControlName="documentId" placeholder="Documento de identidad"
+            class="form-control">
+        </div>
+
+        <!-- Fecha de nacimiento - Primera columna -->
+        <div class="form-group">
+          <label for="birthDate"><i class="fas fa-birthday-cake label-icon"></i> Fecha de nacimiento</label>
+          <input id="birthDate" type="date" formControlName="birthDate" class="form-control">
+        </div>
+
+        <!-- Fecha de registro - Segunda columna -->
+        <div class="form-group">
+          <label><i class="fas fa-calendar-check label-icon"></i> Fecha de registro</label>
+          <div class="form-text"
+            style="padding: 12px 16px; background-color: #f9f9f9; border-radius: 8px; border: 1px solid #eee;">
+            {{selectedMember?.registrationDate || 'No disponible'}}
+          </div>
+        </div>
+
+
+
+      </div>
+
+
+      <div modal-footer class="modal-actions">
+        <app-boton texto="Cancelar" tipo="secondary" (buttonClick)="closeEditModal()" size="medium">
+        </app-boton>
+        <app-boton texto="Guardar" tipo="success" [disabled]="memberForm.invalid || loading || !memberForm.dirty"
+          [isLoading]="loading" size="medium" (buttonClick)="saveMember()">
+        </app-boton>
+      </div>
+    </form>
+  </app-modal>
 </div>

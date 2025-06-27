@@ -3,14 +3,29 @@ import { CommonModule } from '@angular/common';
 import { TableComponent } from '../../../components/table/table';
 import { MemberService } from '../../../services/member.service';
 import { TableService } from '../../../services/table.service';
-import { FormsModule } from '@angular/forms';
+import {
+  FormsModule,
+  ReactiveFormsModule,
+  FormBuilder,
+  FormGroup,
+  Validators,
+} from '@angular/forms';
 import { Member } from '../../../models/member.model';
 import { TableAction, TableConfig } from '../../../models/table.model';
+import { ModalComponent } from '../../../components/modal/modal';
+import { Boton } from '../../../components/boton/boton';
 
 @Component({
   selector: 'app-members',
   standalone: true,
-  imports: [CommonModule, FormsModule, TableComponent],
+  imports: [
+    CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
+    TableComponent,
+    ModalComponent,
+    Boton,
+  ],
   templateUrl: './members.html',
   styleUrls: ['./members.scss'],
 })
@@ -26,6 +41,12 @@ export class MembersComponent implements OnInit {
   activeFilter: string = ''; // '' = todos, 'true' = activos, 'false' = inactivos
   sortField?: string;
   sortDirection?: string;
+
+  // Variables para el modal de edición
+  isEditModalOpen: boolean = false;
+  selectedMember: Member | null = null;
+  memberForm: FormGroup;
+
   tableConfig: TableConfig = {
     columns: [],
     pagination: true,
@@ -41,8 +62,11 @@ export class MembersComponent implements OnInit {
 
   constructor(
     private memberService: MemberService,
-    private tableService: TableService
-  ) {}
+    private tableService: TableService,
+    private fb: FormBuilder
+  ) {
+    this.memberForm = this.createMemberForm();
+  }
 
   ngOnInit(): void {
     this.tableConfig.columns = this.tableService.getMembersTableColumns();
@@ -88,6 +112,74 @@ export class MembersComponent implements OnInit {
         },
       });
   }
+
+  // Crear el formulario para miembros
+  createMemberForm(member?: Member): FormGroup {
+    let formattedBirthDate = '';
+
+    if (member?.birthDate) {
+      formattedBirthDate = this.formatDateForInput(member.birthDate);
+    }
+
+    return this.fb.group({
+      name: [member?.name || '', [Validators.required]],
+      email: [member?.email || '', [Validators.required, Validators.email]],
+      phone: [member?.phone || ''],
+      documentId: [member?.documentId || ''],
+      birthDate: [formattedBirthDate],
+      // No incluimos registrationDate en el formulario ya que es solo informativo y su formato es distinto (incluye hora)
+      active: [member?.active !== undefined ? member.active : true],
+      hasAccount: [member?.hasAccount || false],
+    });
+  }
+
+  // Formatear fecha para el input de tipo date (YYYY-MM-DD)
+  formatDateForInput(dateString: string): string {
+    if (!dateString) return '';
+
+    try {
+      // Detectar el formato de la fecha
+      if (dateString.includes('/')) {
+        // Formato "DD/MM/YYYY" o "DD/MM/YYYY HH:mm"
+        const parts = dateString.split(' ')[0].split('/');
+        if (parts.length === 3) {
+          const day = parseInt(parts[0], 10);
+          const month = parseInt(parts[1], 10) - 1; // Los meses en JS son 0-indexados
+          const year = parseInt(parts[2], 10);
+
+          // Crear fecha con los componentes
+          const date = new Date(year, month, day);
+
+          // Verificar si la fecha es válida
+          if (isNaN(date.getTime())) {
+            return '';
+          }
+
+          // Formatear como YYYY-MM-DD para el input
+          const yyyy = date.getFullYear();
+          const mm = String(date.getMonth() + 1).padStart(2, '0');
+          const dd = String(date.getDate()).padStart(2, '0');
+
+          return `${yyyy}-${mm}-${dd}`;
+        }
+      } else {
+        // Otros formatos, intentar con el constructor de Date estándar
+        const date = new Date(dateString);
+
+        // Verificar si la fecha es válida
+        if (isNaN(date.getTime())) {
+          return '';
+        }
+
+        return date.toISOString().split('T')[0];
+      }
+
+      return '';
+    } catch (error) {
+      return '';
+    }
+  }
+
   setupTableActions(): void {
     const commonActions = this.tableService.getCommonActions();
 
@@ -139,7 +231,99 @@ export class MembersComponent implements OnInit {
   }
 
   editMember(member: Member): void {
-    console.log('Editar miembro:', member);
+    // Si solo tenemos datos parciales del miembro, obtener los detalles completos
+    if (!member.birthDate || !member.registrationDate) {
+      this.loading = true;
+      this.memberService.getMemberById(member.id).subscribe({
+        next: (response) => {
+          this.selectedMember = response.data;
+          this.memberForm = this.createMemberForm(response.data);
+          this.isEditModalOpen = true;
+        },
+        error: (error) => {
+          this.loading = false;
+          // Si falla la obtención de datos detallados, intentamos con los datos que ya tenemos
+          this.selectedMember = member;
+          this.memberForm = this.createMemberForm(member);
+          this.isEditModalOpen = true;
+        },
+        complete: () => {
+          this.loading = false;
+        },
+      });
+    } else {
+      // Si ya tenemos todos los datos necesarios
+      this.selectedMember = member;
+      this.memberForm = this.createMemberForm(member);
+      this.isEditModalOpen = true;
+    }
+  }
+
+  closeEditModal(): void {
+    this.isEditModalOpen = false;
+    this.selectedMember = null;
+  }
+
+  saveMember(): void {
+    if (
+      this.memberForm.invalid ||
+      !this.selectedMember ||
+      !this.memberForm.dirty
+    )
+      return;
+
+    this.loading = true;
+
+    // Obtenemos los valores del formulario
+    const formValues = this.memberForm.value;
+
+    // Crear un objeto para enviar al backend
+    const memberToUpdate: any = {
+      ...formValues,
+      // Eliminar la fecha de nacimiento del objeto inicial
+      // La añadiremos correctamente después
+      birthDate: undefined,
+    };
+
+    // Si tenemos una fecha de nacimiento válida en el formulario
+    if (formValues.birthDate) {
+      try {
+        // Convertir de YYYY-MM-DD (formato del input) a objeto Date de JavaScript
+        // MongoDB/Mongoose puede manejar objetos Date nativos de JavaScript
+        const dateParts = formValues.birthDate.split('-');
+        if (dateParts.length === 3) {
+          const year = parseInt(dateParts[0], 10);
+          const month = parseInt(dateParts[1], 10) - 1; // Los meses en JS son 0-indexados
+          const day = parseInt(dateParts[2], 10);
+
+          // Crear un objeto Date que MongoDB pueda usar
+          const birthDate = new Date(year, month, day);
+
+          // Verificar que la fecha sea válida
+          if (!isNaN(birthDate.getTime())) {
+            // Usar la fecha como objeto Date, no como string
+            memberToUpdate.birthDate = birthDate;
+          }
+        }
+      } catch (error) {
+        // Silenciar error
+      }
+    }
+
+    this.memberService
+      .updateMember(this.selectedMember.id, memberToUpdate)
+      .subscribe({
+        next: (response) => {
+          this.closeEditModal();
+          this.loadMembers();
+        },
+        error: (error) => {
+          this.loading = false;
+        },
+        complete: () => {
+          this.loading = false;
+        },
+      });
   }
 
   toggleStatus(member: Member): void {

@@ -1,6 +1,10 @@
-<div class="sidebar">
+<div class="sidebar" [class.collapsed]="collapsed">
   <div class="sidebar-header">
-    <h2>POWERGYMFIT</h2>
+    <h2 *ngIf="!collapsed">POWERGYMFIT</h2>
+    <h2 *ngIf="collapsed" class="logo-small">P</h2>
+    <div class="toggle-button" (click)="toggleCollapsed()">
+      <i class="material-icons">{{collapsed ? 'chevron_right' : 'chevron_left'}}</i>
+    </div>
     <div class="sidebar-close" (click)="closeSidebar()">
       <i class="material-icons">close</i>
     </div>
@@ -10,22 +14,22 @@
     <div class="avatar">
       <i class="material-icons">account_circle</i>
     </div>
-    <span class="role-badge">{{userRole | titlecase}}</span>
+    <span class="role-badge" *ngIf="!collapsed">{{userRole | titlecase}}</span>
   </div>
   <nav class="sidebar-nav">
     <ul>
       <li *ngFor="let item of filteredMenuItems" [routerLinkActive]="['active']" [class.has-submenu]="item.submenu">
         <!-- Item con submenú -->
-        <a *ngIf="item.submenu" (click)="toggleSubmenu(item)" [class.active]="item.expanded">
+        <a *ngIf="item.submenu" (click)="toggleSubmenu(item); expandSidebar()" [class.active]="item.expanded">
           <i class="material-icons">{{item.icon}}</i>
-          <span>{{item.title}}</span>
-          <i class="material-icons submenu-icon" [class.expanded]="item.expanded">expand_more</i>
+          <span *ngIf="!collapsed">{{item.title}}</span>
+          <i *ngIf="!collapsed" class="material-icons submenu-icon" [class.expanded]="item.expanded">expand_more</i>
         </a>
 
         <!-- Item sin submenú -->
         <a *ngIf="!item.submenu && item.route" [routerLink]="item.route" (click)="closeSidebarOnNavigate()">
           <i class="material-icons">{{item.icon}}</i>
-          <span>{{item.title}}</span>
+          <span *ngIf="!collapsed">{{item.title}}</span>
         </a>
 
         <!-- Submenús -->
@@ -33,7 +37,7 @@
           <li *ngFor="let subItem of item.submenu" [routerLinkActive]="['active']">
             <a [routerLink]="subItem.route" (click)="closeSidebarOnNavigate()">
               <i class="material-icons">{{subItem.icon}}</i>
-              <span>{{subItem.title}}</span>
+              <span *ngIf="!collapsed">{{subItem.title}}</span>
             </a>
           </li>
         </ul>
@@ -44,7 +48,7 @@
   <div class="sidebar-footer">
     <a (click)="logout()" style="cursor: pointer;">
       <i class="material-icons">exit_to_app</i>
-      <span>Cerrar Sesión</span>
+      <span *ngIf="!collapsed">Cerrar Sesión</span>
     </a>
   </div>
 </div>

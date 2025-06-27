@@ -12,7 +12,10 @@ import { AuthService } from '../../services/auth.service';
 })
 export class SidebarComponent {
   @Input() userRole: string = 'user';
+  @Input() collapsed: boolean = false;
   @Output() sidebarToggle = new EventEmitter<boolean>();
+  @Output() collapsedChange = new EventEmitter<boolean>();
+
   menuItems: {
     title: string;
     route: string | null;
@@ -96,6 +99,18 @@ export class SidebarComponent {
    */
   toggleSubmenu(item: any) {
     item.expanded = !item.expanded;
+  }
+
+  toggleCollapsed() {
+    this.collapsed = !this.collapsed;
+    this.collapsedChange.emit(this.collapsed);
+  }
+
+  expandSidebar() {
+    if (this.collapsed) {
+      this.collapsed = false;
+      this.collapsedChange.emit(this.collapsed);
+    }
   }
 
   // Métodos para manejo del sidebar en móvil

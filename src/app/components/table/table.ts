@@ -29,6 +29,8 @@ export class TableComponent implements OnChanges {
   @Input() totalRecords: number = 0;
   @Input() actions: TableAction[] = [];
   @Input() customTemplates: { [key: string]: TemplateRef<any> } = {};
+  @Input() currentSort: { field: string; direction: 'asc' | 'desc' } | null =
+    null;
   @Output() pageChange = new EventEmitter<{ page: number; pageSize: number }>();
   @Output() sortChange = new EventEmitter<any>();
   @Output() rowSelect = new EventEmitter<any>();
@@ -37,11 +39,14 @@ export class TableComponent implements OnChanges {
   currentPage: number = 1;
   pageSize: number = 10;
   selectedRows: any[] = [];
-  currentSort: { field: string; direction: 'asc' | 'desc' } | null = null;
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['data']) {
       this.selectedRows = [];
+    }
+
+    if (changes['currentSort'] && changes['currentSort'].currentValue) {
+      this.currentSort = changes['currentSort'].currentValue;
     }
   }
 
@@ -171,24 +176,14 @@ export class TableComponent implements OnChanges {
     return pages;
   }
 
-  /**
-   * Filtra las acciones para evitar mostrar botones duplicados para activar/desactivar
-   * @param item El ítem de la fila actual
-   * @returns Lista de acciones únicas para este ítem
-   */
   getUniqueActions(item: any): TableAction[] {
-    // Filtrar acciones según el showIf
     const visibleActions = this.actions.filter((action) => {
       return !action.showIf || action.showIf(item);
     });
-
-    // Eliminar acciones duplicadas (basadas en la misma funcionalidad)
-    // Solo mantener una acción entre 'activate'/'deactivate' basada en el estado del ítem
     const uniqueActions: TableAction[] = [];
     const handledFunctions = new Set<string>();
 
     visibleActions.forEach((action) => {
-      // Para controles de toggle de estado (activate/deactivate), solo mostrar uno
       if (action.label === 'Activar' || action.label === 'Desactivar') {
         const toggleKey = 'toggle-status';
         if (!handledFunctions.has(toggleKey)) {
@@ -196,7 +191,6 @@ export class TableComponent implements OnChanges {
           uniqueActions.push(action);
         }
       } else {
-        // Para otras acciones, mantener todas
         uniqueActions.push(action);
       }
     });

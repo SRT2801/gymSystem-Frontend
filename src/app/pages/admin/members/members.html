@@ -8,12 +8,10 @@
 
   <div class="members-content">
     <div class="search-filters">
-      <div class="search-box">
-        <input type="text" placeholder="Buscar miembros...">
-        <button class="search-button">
-          <i class="fas fa-search"></i>
-        </button>
-      </div>
+      <app-searchbar placeholder="Buscar por nombre, email o documento..." cssClass="searchbar-rounded"
+        [debounceTime]="500" [minLength]="3" [initialValue]="searchTerm" (search)="onSearch($event)"
+        (clear)="onClearSearch()">
+      </app-searchbar>
 
       <div class="filters">
         <select [(ngModel)]="activeFilter" (change)="onFilterChange(activeFilter)">
@@ -24,9 +22,44 @@
       </div>
     </div>
 
+    <!-- Indicador de búsqueda activa -->
+    <div *ngIf="searchTerm && (searchTerm.trim().length >= 3 || isNumeric(searchTerm))" class="search-indicator">
+      <span>
+        <i class="fas fa-search"></i>
+        Buscando resultados para: <strong>"{{searchTerm}}"</strong>
+      </span>
+      <button class="clear-search-btn" (click)="onClearSearch()">
+        <i class="fas fa-times"></i> Limpiar búsqueda
+      </button>
+    </div>
+
+    <!-- Indicador de que se necesitan más caracteres -->
+    <div *ngIf="shouldShowMinLengthWarning()" class="search-indicator warning">
+      <span>
+        <i class="fas fa-exclamation-circle"></i>
+        Escribe al menos 3 caracteres para buscar
+      </span>
+      <button class="clear-search-btn" (click)="onClearSearch()">
+        <i class="fas fa-times"></i> Cancelar
+      </button>
+    </div>
+
+    <!-- Mensaje de no resultados -->
+    <div
+      *ngIf="!loading && searchTerm && (searchTerm.trim().length >= 3 || isNumeric(searchTerm)) && members.length === 0"
+      class="no-results-message">
+      <div class="no-results-content">
+        <i class="fas fa-search"></i>
+        <h3>No se encontraron miembros</h3>
+        <p>No hay resultados para "<strong>{{searchTerm}}</strong>"</p>
+        <app-boton label="Limpiar búsqueda" tipo="secondary" (click)="onClearSearch()"></app-boton>
+      </div>
+    </div>
+
     <!-- Tabla de miembros -->
-    <app-table [data]="members" [config]="tableConfig" [loading]="loading" [totalRecords]="totalRecords"
-      [actions]="tableActions" [customTemplates]="customTemplates" (pageChange)="onPageChange($event)"
+    <app-table *ngIf="!loading || members.length > 0" [data]="members" [config]="tableConfig" [loading]="loading"
+      [totalRecords]="totalRecords" [actions]="tableActions" [customTemplates]="customTemplates"
+      [currentSort]="{ field: sortField, direction: 'desc' }" (pageChange)="onPageChange($event)"
       (sortChange)="onSortChange($event)">
     </app-table>
   </div>
@@ -42,7 +75,6 @@
 
   <!-- Modal para editar miembros -->
   <app-modal [isOpen]="isEditModalOpen" [title]="'Editar Miembro'" [size]="'md'" (closeModal)="closeEditModal()">
-    <!-- Resumen del miembro -->
     <div *ngIf="selectedMember" class="member-summary">
       <div class="member-avatar">
         <i class="fas fa-user-circle"></i>
@@ -57,7 +89,6 @@
     <!-- Formulario de edición -->
     <form [formGroup]="memberForm" (ngSubmit)="saveMember()">
       <div class="edit-form-container">
-        <!-- Nombre completo - Primera columna -->
         <div class="form-group">
           <label for="name"><i class="fas fa-user label-icon"></i> Nombre completo</label>
           <input id="name" type="text" formControlName="name" placeholder="Nombre completo" class="form-control">
@@ -66,7 +97,7 @@
           </div>
         </div>
 
-        <!-- Email - Segunda columna -->
+
         <div class="form-group">
           <label for="email"><i class="fas fa-envelope label-icon"></i> Correo electrónico</label>
           <input id="email" type="email" formControlName="email" placeholder="Correo electrónico" class="form-control">
@@ -75,26 +106,22 @@
           </div>
         </div>
 
-        <!-- Teléfono - Primera columna -->
         <div class="form-group">
           <label for="phone"><i class="fas fa-phone-alt label-icon"></i> Teléfono</label>
           <input id="phone" type="tel" formControlName="phone" placeholder="Teléfono" class="form-control">
         </div>
 
-        <!-- DNI - Segunda columna -->
+
         <div class="form-group">
           <label for="documentId"><i class="fas fa-id-card label-icon"></i> Documento de identidad</label>
           <input id="documentId" type="text" formControlName="documentId" placeholder="Documento de identidad"
             class="form-control">
         </div>
 
-        <!-- Fecha de nacimiento - Primera columna -->
         <div class="form-group">
           <label for="birthDate"><i class="fas fa-birthday-cake label-icon"></i> Fecha de nacimiento</label>
           <input id="birthDate" type="date" formControlName="birthDate" class="form-control">
         </div>
-
-        <!-- Fecha de registro - Segunda columna -->
         <div class="form-group">
           <label><i class="fas fa-calendar-check label-icon"></i> Fecha de registro</label>
           <div class="form-text"
@@ -102,9 +129,6 @@
             {{selectedMember?.registrationDate || 'No disponible'}}
           </div>
         </div>
-
-
-
       </div>
 
 

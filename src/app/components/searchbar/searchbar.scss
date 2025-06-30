@@ -1,0 +1,146 @@
+.searchbar-container {
+  width: 100%;
+  max-width: 500px;
+  margin: 0 auto;
+  position: relative;
+
+  .search-input-wrapper {
+    position: relative;
+    width: 100%;
+
+    &.icon-left {
+      .search-input {
+        padding-left: 40px;
+      }
+      .search-icon {
+        left: 10px;
+      }
+    }
+
+    &.icon-right {
+      .search-input {
+        padding-right: 40px;
+      }
+      .search-icon {
+        right: 10px;
+      }
+    }
+
+    .min-length-message {
+      position: absolute;
+      right: 10px;
+      top: calc(100% + 2px);
+      background-color: rgba(255, 77, 48, 0.1);
+      color: #ff4d30;
+      font-size: 0.8rem;
+      padding: 2px 8px;
+      border-radius: 4px;
+      z-index: 10;
+    }
+
+    .search-input {
+      width: 100%;
+      padding: 10px 15px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      font-size: 14px;
+      outline: none;
+      transition: border-color 0.3s, box-shadow 0.3s;
+
+      &:focus {
+        border-color: #4a90e2;
+        box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.2);
+      }
+    }
+
+    .search-icon {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #6c757d;
+      pointer-events: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .clear-icon {
+      position: absolute;
+      right: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #6c757d;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      &:hover {
+        color: #343a40;
+      }
+    }
+  }
+}
+
+// Variantes de tamaño y estilo que se pueden aplicar a través de las clases CSS
+.searchbar-sm {
+  .search-input {
+    padding: 6px 12px;
+    font-size: 12px;
+  }
+
+  .search-icon,
+  .clear-icon {
+    svg {
+      height: 16px;
+      width: 16px;
+    }
+  }
+}
+
+.searchbar-lg {
+  .search-input {
+    padding: 12px 18px;
+    font-size: 16px;
+  }
+
+  .search-icon,
+  .clear-icon {
+    svg {
+      height: 24px;
+      width: 24px;
+    }
+  }
+}
+
+.searchbar-rounded {
+  .search-input {
+    border-radius: 50px;
+  }
+}
+
+.searchbar-dark {
+  .search-input {
+    background-color: #343a40;
+    border-color: #495057;
+    color: #f8f9fa;
+
+    &::placeholder {
+      color: #adb5bd;
+    }
+
+    &:focus {
+      border-color: #6c757d;
+      box-shadow: 0 0 0 3px rgba(108, 117, 125, 0.2);
+    }
+  }
+
+  .search-icon,
+  .clear-icon {
+    color: #adb5bd;
+
+    &:hover {
+      color: #f8f9fa;
+    }
+  }
+}

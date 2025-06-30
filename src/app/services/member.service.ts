@@ -17,18 +17,48 @@ export class MemberService {
     limit: number = 10,
     active?: boolean,
     sortField?: string,
-    sortDirection?: string
+    sortDirection?: string,
+    searchParams: {
+      name?: string;
+      email?: string;
+      documentId?: string;
+      hasAccount?: boolean;
+      registrationDateFrom?: string;
+      registrationDateTo?: string;
+    } = {}
   ): Observable<MemberResponse> {
     let url = `${this.apiUrl}/members?page=${page}&limit=${limit}`;
 
-    // Agregar filtro de activo/inactivo si se especifica
     if (active !== undefined) {
       url += `&active=${active}`;
     }
 
-    // Agregar ordenamiento si se especifica
     if (sortField && sortDirection) {
-      url += `&sort=${sortField}&order=${sortDirection}`;
+      url += `&sortBy=${sortField}&sortOrder=${sortDirection}`;
+    }
+
+    if (searchParams.name) {
+      url += `&name=${encodeURIComponent(searchParams.name)}`;
+    }
+
+    if (searchParams.email) {
+      url += `&email=${encodeURIComponent(searchParams.email)}`;
+    }
+
+    if (searchParams.documentId) {
+      url += `&documentId=${encodeURIComponent(searchParams.documentId)}`;
+    }
+
+    if (searchParams.hasAccount !== undefined) {
+      url += `&hasAccount=${searchParams.hasAccount}`;
+    }
+
+    if (searchParams.registrationDateFrom) {
+      url += `&registrationDateFrom=${searchParams.registrationDateFrom}`;
+    }
+
+    if (searchParams.registrationDateTo) {
+      url += `&registrationDateTo=${searchParams.registrationDateTo}`;
     }
 
     return this.http.get<MemberResponse>(url);

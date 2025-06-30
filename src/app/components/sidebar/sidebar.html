@@ -22,14 +22,14 @@
         <!-- Item con submenú -->
         <a *ngIf="item.submenu" (click)="toggleSubmenu(item); expandSidebar()" [class.active]="item.expanded">
           <i class="material-icons">{{item.icon}}</i>
-          <span *ngIf="!collapsed">{{item.title}}</span>
-          <i *ngIf="!collapsed" class="material-icons submenu-icon" [class.expanded]="item.expanded">expand_more</i>
+          <span *ngIf="!collapsed || isMobile">{{item.title}}</span>
+          <i *ngIf="!collapsed || isMobile" class="material-icons submenu-icon" [class.expanded]="item.expanded">expand_more</i>
         </a>
 
         <!-- Item sin submenú -->
         <a *ngIf="!item.submenu && item.route" [routerLink]="item.route" (click)="closeSidebarOnNavigate()">
           <i class="material-icons">{{item.icon}}</i>
-          <span *ngIf="!collapsed">{{item.title}}</span>
+          <span *ngIf="!collapsed || isMobile">{{item.title}}</span>
         </a>
 
         <!-- Submenús -->
@@ -48,7 +48,7 @@
   <div class="sidebar-footer">
     <a (click)="logout()" style="cursor: pointer;">
       <i class="material-icons">exit_to_app</i>
-      <span *ngIf="!collapsed">Cerrar Sesión</span>
+      <span *ngIf="!collapsed || isMobile">Cerrar Sesión</span>
     </a>
   </div>
 </div>

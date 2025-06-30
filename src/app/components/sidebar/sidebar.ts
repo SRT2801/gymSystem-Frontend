@@ -1,4 +1,10 @@
-import { Component, Input, EventEmitter, Output } from '@angular/core';
+import {
+  Component,
+  Input,
+  EventEmitter,
+  Output,
+  OnDestroy,
+} from '@angular/core';
 import { RouterModule, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../../services/auth.service';
@@ -10,11 +16,12 @@ import { AuthService } from '../../services/auth.service';
   templateUrl: './sidebar.html',
   styleUrls: ['./sidebar.scss'],
 })
-export class SidebarComponent {
+export class SidebarComponent implements OnDestroy {
   @Input() userRole: string = 'user';
   @Input() collapsed: boolean = false;
   @Output() sidebarToggle = new EventEmitter<boolean>();
   @Output() collapsedChange = new EventEmitter<boolean>();
+  isMobile: boolean = false;
 
   menuItems: {
     title: string;
@@ -76,7 +83,17 @@ export class SidebarComponent {
     },
   ];
 
-  constructor(private authService: AuthService, private router: Router) {}
+  private resizeHandler: () => void;
+
+  constructor(private authService: AuthService, private router: Router) {
+    this.checkIfMobile();
+    this.resizeHandler = this.checkIfMobile.bind(this);
+    window.addEventListener('resize', this.resizeHandler);
+  }
+
+  checkIfMobile() {
+    this.isMobile = window.innerWidth <= 768;
+  }
 
   get filteredMenuItems() {
     return this.menuItems.filter((item) => item.roles.includes(this.userRole));
@@ -93,10 +110,6 @@ export class SidebarComponent {
     });
   }
 
-  /**
-   * Toggle para expandir/contraer submenús
-   * @param item Item del menú a expandir/contraer
-   */
   toggleSubmenu(item: any) {
     item.expanded = !item.expanded;
   }
@@ -113,15 +126,17 @@ export class SidebarComponent {
     }
   }
 
-  // Métodos para manejo del sidebar en móvil
   closeSidebar() {
     this.sidebarToggle.emit(false);
   }
 
   closeSidebarOnNavigate() {
-    // En pantallas pequeñas, cerrar el sidebar al navegar
     if (window.innerWidth <= 768) {
       this.closeSidebar();
     }
+  }
+
+  ngOnDestroy() {
+    window.removeEventListener('resize', this.resizeHandler);
   }
 }

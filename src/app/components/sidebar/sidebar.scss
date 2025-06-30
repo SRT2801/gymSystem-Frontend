@@ -248,7 +248,37 @@ $sidebar-collapsed-width: 70px;
     );
 
     &.collapsed {
-      width: 100%; // En móvil no se colapsa
+      width: 100%; 
+
+
+      .sidebar-nav {
+        ul li {
+          a {
+            justify-content: flex-start;
+            padding: 15px 20px;
+
+            i {
+              margin-right: 15px;
+            }
+
+            span {
+              display: block !important;
+            }
+          }
+        }
+      }
+
+      .sidebar-footer a {
+        justify-content: flex-start;
+
+        i {
+          margin-right: 15px;
+        }
+
+        span {
+          display: block !important;
+        }
+      }
     }
   }
 
@@ -266,13 +296,16 @@ $sidebar-collapsed-width: 70px;
     li {
       a {
         padding: 15px 20px; /* Botones más grandes para mejor experiencia táctil */
+        justify-content: flex-start;
 
         i {
           font-size: 24px; /* Iconos más grandes */
+          margin-right: 15px;
         }
 
         span {
           font-size: 1rem; /* Texto más grande */
+          display: block;
         }
       }
     }

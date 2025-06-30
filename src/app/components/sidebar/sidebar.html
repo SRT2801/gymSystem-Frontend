@@ -23,7 +23,8 @@
         <a *ngIf="item.submenu" (click)="toggleSubmenu(item); expandSidebar()" [class.active]="item.expanded">
           <i class="material-icons">{{item.icon}}</i>
           <span *ngIf="!collapsed || isMobile">{{item.title}}</span>
-          <i *ngIf="!collapsed || isMobile" class="material-icons submenu-icon" [class.expanded]="item.expanded">expand_more</i>
+          <i *ngIf="!collapsed || isMobile" class="material-icons submenu-icon"
+            [class.expanded]="item.expanded">expand_more</i>
         </a>
 
         <!-- Item sin submenú -->

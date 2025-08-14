@@ -1,38 +1,40 @@
 <div class="complete-profile-container">
-    <div class="card">
-        <h2>Completa tu Perfil</h2>
-        <p class="subtitle">Necesitamos algunos datos adicionales para finalizar tu registro.</p>
+  <div class="card">
+    <h2>Completa tu Perfil</h2>
+    <p class="subtitle">Necesitamos algunos datos adicionales para finalizar tu registro.</p>
 
-        <form [formGroup]="form" (ngSubmit)="submit()" novalidate>
-            <div class="form-group">
-                <label for="phone">Teléfono</label>
-                <input id="phone" type="text" formControlName="phone" placeholder="Número de teléfono" />
-                <div class="error" *ngIf="form.get('phone')?.touched && form.get('phone')?.invalid">
-                    Teléfono requerido (mínimo 6 caracteres)
-                </div>
-            </div>
+    <form [formGroup]="form" (ngSubmit)="submit()" novalidate>
+      <div class="form-group">
+        <label for="phone">Teléfono</label>
+        <input id="phone" type="text" formControlName="phone" placeholder="Número de teléfono" />
+        <div class="error" *ngIf="form.get('phone')?.touched && form.get('phone')?.invalid">
+          Teléfono requerido (mínimo 6 caracteres)
+        </div>
+      </div>
 
-            <div class="form-group">
-                <label for="documentId">Documento de identidad</label>
-                <input id="documentId" type="text" formControlName="documentId" placeholder="Documento" />
-                <div class="error" *ngIf="form.get('documentId')?.touched && form.get('documentId')?.invalid">
-                    Documento requerido (mínimo 5 caracteres)
-                </div>
-            </div>
 
-            <div class="form-group">
-                <label for="birthDate">Fecha de nacimiento</label>
-                <input id="birthDate" type="date" formControlName="birthDate" />
-                <div class="error" *ngIf="form.get('birthDate')?.touched && form.get('birthDate')?.invalid">
-                    Fecha de nacimiento requerida
-                </div>
-            </div>
 
-            <div class="alert error" *ngIf="error">{{ error }}</div>
-            <div class="alert success" *ngIf="success">Perfil completado correctamente</div>
+      <div class="form-group">
+        <label for="documentId">Documento de identidad</label>
+        <input id="documentId" type="text" formControlName="documentId" placeholder="Documento" />
+        <div class="error" *ngIf="form.get('documentId')?.touched && form.get('documentId')?.invalid">
+          Documento requerido (mínimo 5 caracteres)
+        </div>
+      </div>
 
-            <app-boton texto="GUARDAR" tipo="gym" size="large" [fullWidth]="true" [isLoading]="loading"
-                (buttonClick)="submit()"></app-boton>
-        </form>
-    </div>
+      <div class="form-group">
+        <label for="birthDate">Fecha de nacimiento</label>
+        <input id="birthDate" type="date" formControlName="birthDate" />
+        <div class="error" *ngIf="form.get('birthDate')?.touched && form.get('birthDate')?.invalid">
+          Fecha de nacimiento requerida
+        </div>
+      </div>
+
+      <div class="alert error" *ngIf="error">{{ error }}</div>
+      <div class="alert success" *ngIf="success">Perfil completado correctamente</div>
+
+      <app-boton texto="GUARDAR" tipo="gym" size="large" [fullWidth]="true" [isLoading]="loading"
+        (buttonClick)="submit()"></app-boton>
+    </form>
+  </div>
 </div>

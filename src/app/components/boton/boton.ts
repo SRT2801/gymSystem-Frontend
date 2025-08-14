@@ -12,6 +12,7 @@ export class Boton {
   @Input() texto: string = '';
   @Input() tipo: string = 'primary';
   @Input() icono: string = '';
+  @Input() imagen: string = '';
   @Input() disabled: boolean = false;
   @Input() fullWidth: boolean = false;
   @Input() size: 'small' | 'medium' | 'large' = 'medium';

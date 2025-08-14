@@ -24,7 +24,6 @@ export class App implements OnInit {
 
     if (auth === 'success') {
       if (completeProfile === 'true') {
-
         this.authService.setIncompleteProfileFlag(true);
       }
 
@@ -32,9 +31,13 @@ export class App implements OnInit {
       window.history.replaceState({}, document.title, cleanUrl);
     }
 
-
-    this.authService.verifySessionWithBackend();
-
+    // Inicializar sesión una sola vez al cargar la aplicación
+    this.authService.initializeSession().subscribe({
+      next: (user) => {},
+      error: (error) => {
+        console.log('Session initialization failed:', error);
+      },
+    });
 
     const sub = this.authService.currentUser$.subscribe((user) => {
       if (!user) return;
@@ -48,18 +51,15 @@ export class App implements OnInit {
           replaceUrl: true,
         });
       } else {
-        // Si estamos en raíz/home tras login exitoso, redirigir a destino.
         if (auth === 'success') {
           this.router.navigate([this.authService.getRedirectUrl()], {
             replaceUrl: true,
           });
         }
       }
-      // Podemos desuscribir tras primera decisión.
       setTimeout(() => sub.unsubscribe(), 0);
     });
 
-    // Si ya había usuario en localStorage sin auth=success, redirigir desde home.
     if (!auth && this.authService.isAuthenticated()) {
       const redirectUrl = this.authService.getRedirectUrl();
       if (

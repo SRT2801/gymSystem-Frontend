@@ -35,6 +35,10 @@ export class Header implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    // Si no tenemos usuario cargado pero podría existir cookie httpOnly, forzamos verificación.
+    if (!this.isAuthenticated) {
+      this.authService.verifySessionWithBackend();
+    }
     this.authSubscription = this.authService.authState$.subscribe(
       (isAuthenticated) => {
         this.isAuthenticated = isAuthenticated;

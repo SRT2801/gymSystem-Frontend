@@ -18,6 +18,13 @@ export const routes: Routes = [
       { path: 'home', component: Home },
       { path: 'login', component: Login },
       { path: 'register', component: Register },
+      {
+        path: 'complete-profile',
+        loadComponent: () =>
+          import('./pages/complete-profile/complete-profile').then(
+            (m) => m.CompleteProfileComponent
+          ),
+      },
     ],
   },
 

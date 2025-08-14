@@ -53,6 +53,23 @@ export class AuthService {
   constructor(private http: HttpClient) {
     this.loadUserFromLocalStorage();
   }
+  /**
+   * Indica si el backend (via redirect de Google) nos señaló que el perfil está incompleto.
+   * Se guarda hasta que se complete el perfil.
+   */
+  private incompleteProfileFlagKey = 'incomplete_profile_flag';
+
+  setIncompleteProfileFlag(value: boolean) {
+    if (value) {
+      localStorage.setItem(this.incompleteProfileFlagKey, 'true');
+    } else {
+      localStorage.removeItem(this.incompleteProfileFlagKey);
+    }
+  }
+
+  hasIncompleteProfileFlag(): boolean {
+    return localStorage.getItem(this.incompleteProfileFlagKey) === 'true';
+  }
   verifySessionWithBackend(): void {
     if (this.sessionCheckInProgress) return;
 
@@ -95,9 +112,10 @@ export class AuthService {
       .post<AuthResponse>(`${this.API_URL}/auth/login`, credentials)
       .pipe(
         tap((response) => {
-          if (response && response.user) {
-            localStorage.setItem(this.USER_KEY, JSON.stringify(response.user));
-            this.setCurrentUser(response.user);
+          const user = (response as any)?.user || response;
+          if (user && user.id) {
+            localStorage.setItem(this.USER_KEY, JSON.stringify(user));
+            this.setCurrentUser(user);
           }
         })
       );
@@ -107,9 +125,10 @@ export class AuthService {
       .post<AuthResponse>(`${this.API_URL}/auth/register`, userData)
       .pipe(
         tap((response) => {
-          if (response && response.user) {
-            localStorage.setItem(this.USER_KEY, JSON.stringify(response.user));
-            this.setCurrentUser(response.user);
+          const user = (response as any)?.user || response;
+          if (user && user.id) {
+            localStorage.setItem(this.USER_KEY, JSON.stringify(user));
+            this.setCurrentUser(user);
           }
         }),
         catchError((error) => {
@@ -124,6 +143,10 @@ export class AuthService {
 
     this.currentUserSubject.next(user);
     this.authStateSubject.next(true);
+    // Solo quitamos el flag si explícitamente completeProfile === true
+    if (user.completeProfile === true) {
+      this.setIncompleteProfileFlag(false);
+    }
   }
 
   getUser(): any {
@@ -136,8 +159,9 @@ export class AuthService {
     }
 
     this.sessionCheckObs = this.http.get<any>(`${this.API_URL}/auth/me`).pipe(
-      tap((user) => {
-        if (user && user.name) {
+      tap((resp) => {
+        const user = resp?.user || resp; // backend devuelve { user: {...} }
+        if (user && user.name && user.id) {
           localStorage.setItem(this.USER_KEY, JSON.stringify(user));
           this.setCurrentUser(user);
         }
@@ -199,5 +223,24 @@ export class AuthService {
         return of({ success: true });
       })
     );
+  }
+
+  /** Completa el perfil del miembro autenticado (flujo Google). */
+  completeProfile(data: {
+    phone: string;
+    documentId: string;
+    birthDate: string;
+  }): Observable<any> {
+    return this.http
+      .post<any>(`${this.API_URL}/auth/complete-profile`, data)
+      .pipe(
+        tap((resp) => {
+          if (resp && resp.user) {
+            localStorage.setItem(this.USER_KEY, JSON.stringify(resp.user));
+            this.setCurrentUser(resp.user);
+            this.setIncompleteProfileFlag(false);
+          }
+        })
+      );
   }
 }

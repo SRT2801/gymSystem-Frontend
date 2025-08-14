@@ -60,15 +60,9 @@
           <span>o</span>
         </div>
         <div class="google-login full-width">
-          <app-boton 
-            [texto]="googleAuthLoading ? 'Redirigiendo...' : 'Iniciar sesión con Google'" 
-            tipo="google" 
-            size="large" 
-            [fullWidth]="true" 
-            [disabled]="googleAuthLoading"
-            [isLoading]="googleAuthLoading"
-            imagen="/assets/google.svg"
-            (buttonClick)="onGoogleLogin()">
+          <app-boton [texto]="googleAuthLoading ? 'Redirigiendo...' : 'Iniciar sesión con Google'" tipo="google"
+            size="large" [fullWidth]="true" [disabled]="googleAuthLoading" [isLoading]="googleAuthLoading"
+            imagen="/assets/google.svg" (buttonClick)="onGoogleLogin()">
           </app-boton>
         </div>
         <div class="additional-links full-width">

@@ -35,10 +35,6 @@ export class Header implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    // Si no tenemos usuario cargado pero podría existir cookie httpOnly, forzamos verificación.
-    if (!this.isAuthenticated) {
-      this.authService.verifySessionWithBackend();
-    }
     this.authSubscription = this.authService.authState$.subscribe(
       (isAuthenticated) => {
         this.isAuthenticated = isAuthenticated;
@@ -109,5 +105,58 @@ export class Header implements OnInit, OnDestroy {
         this.router.navigate(['/home']);
       },
     });
+  }
+
+  logoutAndClose() {
+    this.closeMobileMenu();
+    this.logout();
+  }
+
+  scrollToSection(sectionId: string) {
+    if (this.router.url !== '/home') {
+      this.router.navigate(['/home']).then(() => {
+        setTimeout(() => {
+          this.performScroll(sectionId);
+        }, 300);
+      });
+    } else {
+      this.performScroll(sectionId);
+    }
+  }
+
+  scrollToSectionAndClose(sectionId: string) {
+    this.closeMobileMenu();
+    setTimeout(() => {
+      this.scrollToSection(sectionId);
+    }, 100);
+  }
+
+  private performScroll(sectionId: string) {
+    const element = document.getElementById(sectionId);
+
+    if (element) {
+      const headerHeight = 80;
+      const elementPosition = element.offsetTop - headerHeight;
+
+      window.scrollTo({
+        top: elementPosition,
+        behavior: 'smooth',
+      });
+    } else {
+      setTimeout(() => {
+        const retryElement = document.getElementById(sectionId);
+        if (retryElement) {
+          const headerHeight = 80;
+          const elementPosition = retryElement.offsetTop - headerHeight;
+
+          window.scrollTo({
+            top: elementPosition,
+            behavior: 'smooth',
+          });
+        } else {
+          console.log('Element still not found after retry:', sectionId);
+        }
+      }, 500);
+    }
   }
 }

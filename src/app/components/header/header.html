@@ -7,14 +7,14 @@
           <span class="logo-text">PowerFit<span class="highlight">GYM</span></span>
         </a>
       </div>
-      <nav class="main-nav" *ngIf="!isAuthenticated">
+      <nav class="main-nav">
         <ul class="nav-links">
-          <li><a routerLink="/home" class="nav-link">Inicio</a></li>
-          <li><a routerLink="/clases" class="nav-link">Clases</a></li>
-          <li><a routerLink="/entrenadores" class="nav-link">Entrenadores</a></li>
-          <li><a routerLink="/planes" class="nav-link">Planes</a></li>
-          <li><a routerLink="/horarios" class="nav-link">Horarios</a></li>
-          <li><a routerLink="/contacto" class="nav-link">Contacto</a></li>
+          <li><a (click)="scrollToSection('inicio')" class="nav-link">Inicio</a></li>
+          <li><a (click)="scrollToSection('clases')" class="nav-link">Clases</a></li>
+          <li><a (click)="scrollToSection('entrenadores')" class="nav-link">Entrenadores</a></li>
+          <li><a (click)="scrollToSection('planes')" class="nav-link">Planes</a></li>
+          <li><a (click)="scrollToSection('horarios')" class="nav-link">Horarios</a></li>
+          <li><a (click)="scrollToSection('contacto')" class="nav-link">Contacto</a></li>
         </ul>
       </nav>
       <div class="header-actions">
@@ -28,7 +28,9 @@
             <app-boton texto="Registrarse" tipo="primary" size="medium"
               (buttonClick)="navigateTo('/register')"></app-boton>
           </div>
-        </ng-container> <!-- Mostrar cuando el usuario SÍ está autenticado --> <ng-container *ngIf="isAuthenticated">
+        </ng-container>
+
+        <ng-container *ngIf="isAuthenticated">
           <div class="user-welcome">
             Hola, {{userName}}
           </div>
@@ -36,6 +38,14 @@
             <app-boton texto="Cerrar Sesión" tipo="light" size="medium" (buttonClick)="logout()"></app-boton>
           </div>
         </ng-container>
+
+        <!-- Botón de menú móvil -->
+        <button class="mobile-menu-btn" (click)="toggleMobileMenu()" [class.active]="isMobileMenuOpen"
+          aria-label="Toggle mobile menu">
+          <span class="bar" [class.active]="isMobileMenuOpen"></span>
+          <span class="bar" [class.active]="isMobileMenuOpen"></span>
+          <span class="bar" [class.active]="isMobileMenuOpen"></span>
+        </button>
       </div>
     </div>
   </div>
@@ -43,31 +53,47 @@
 
 <!-- Menú móvil para pantallas pequeñas -->
 <div class="mobile-menu" [class.active]="isMobileMenuOpen">
-  <ul class="mobile-nav-links">
-    <ng-container *ngIf="!isAuthenticated">
-      <li><a routerLink="/home" (click)="closeMobileMenu()">Inicio</a></li>
-      <li><a routerLink="/clases" (click)="closeMobileMenu()">Clases</a></li>
-      <li><a routerLink="/entrenadores" (click)="closeMobileMenu()">Entrenadores</a></li>
-      <li><a routerLink="/planes" (click)="closeMobileMenu()">Planes</a></li>
-      <li><a routerLink="/horarios" (click)="closeMobileMenu()">Horarios</a></li>
-      <li><a routerLink="/contacto" (click)="closeMobileMenu()">Contacto</a></li>
-    </ng-container>
+  <div class="mobile-menu-overlay" (click)="closeMobileMenu()"></div>
+  <div class="mobile-menu-content">
+    <ul class="mobile-nav-links">
+      <!-- Enlaces de navegación para todos los usuarios -->
+      <li><a (click)="scrollToSectionAndClose('inicio')">Inicio</a></li>
+      <li><a (click)="scrollToSectionAndClose('clases')">Clases</a></li>
+      <li><a (click)="scrollToSectionAndClose('entrenadores')">Entrenadores</a></li>
+      <li><a (click)="scrollToSectionAndClose('planes')">Planes</a></li>
+      <li><a (click)="scrollToSectionAndClose('horarios')">Horarios</a></li>
+      <li><a (click)="scrollToSectionAndClose('contacto')">Contacto</a></li>
 
-    <!-- Opciones para usuarios NO autenticados -->
-    <li class="mobile-auth" *ngIf="!isAuthenticated">
-      <div class="mobile-btn-wrapper">
-        <app-boton texto="Iniciar Sesión" tipo="light" size="medium" [fullWidth]="true"
-          (buttonClick)="navigateToAndClose('/login')"></app-boton>
-      </div>
-      <div class="mobile-btn-wrapper">
-        <app-boton texto="Registrarse" tipo="primary" size="medium" [fullWidth]="true"
-          (buttonClick)="navigateToAndClose('/register')"></app-boton>
-      </div>
-    </li> <!-- Opciones para usuarios autenticados -->
-    <li class="mobile-auth" *ngIf="isAuthenticated">
-      <div class="user-welcome-mobile">
-        Hola, {{userName}}
-      </div>
-    </li>
-  </ul>
+      <!-- Opciones para usuarios NO autenticados -->
+      <li class="mobile-auth" *ngIf="!isAuthenticated">
+        <div class="mobile-btn-wrapper">
+          <app-boton texto="Iniciar Sesión" tipo="light" size="medium" [fullWidth]="true"
+            (buttonClick)="navigateToAndClose('/login')"></app-boton>
+        </div>
+        <div class="mobile-btn-wrapper">
+          <app-boton texto="Registrarse" tipo="primary" size="medium" [fullWidth]="true"
+            (buttonClick)="navigateToAndClose('/register')"></app-boton>
+        </div>
+      </li>
+
+      <!-- Opciones para usuarios autenticados -->
+      <li class="mobile-auth" *ngIf="isAuthenticated">
+        <div class="user-welcome-mobile">
+          Hola, {{userName}}
+        </div>
+        <div class="mobile-btn-wrapper">
+          <app-boton texto="Mi Perfil" tipo="light" size="medium" [fullWidth]="true"
+            (buttonClick)="navigateToAndClose('/profile')"></app-boton>
+        </div>
+        <div class="mobile-btn-wrapper">
+          <app-boton texto="Dashboard" tipo="primary" size="medium" [fullWidth]="true"
+            (buttonClick)="navigateToAndClose('/dashboard')"></app-boton>
+        </div>
+        <div class="mobile-btn-wrapper">
+          <app-boton texto="Cerrar Sesión" tipo="light" size="medium" [fullWidth]="true"
+            (buttonClick)="logoutAndClose()"></app-boton>
+        </div>
+      </li>
+    </ul>
+  </div>
 </div>

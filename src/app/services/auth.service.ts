@@ -53,10 +53,7 @@ export class AuthService {
   constructor(private http: HttpClient) {
     this.loadUserFromLocalStorage();
   }
-  /**
-   * Indica si el backend (via redirect de Google) nos señaló que el perfil está incompleto.
-   * Se guarda hasta que se complete el perfil.
-   */
+
   private incompleteProfileFlagKey = 'incomplete_profile_flag';
 
   setIncompleteProfileFlag(value: boolean) {
@@ -132,7 +129,6 @@ export class AuthService {
           }
         }),
         catchError((error) => {
-          // Reenviamos el error para que el componente pueda manejarlo
           return throwError(() => error);
         })
       );
@@ -143,7 +139,7 @@ export class AuthService {
 
     this.currentUserSubject.next(user);
     this.authStateSubject.next(true);
-    // Solo quitamos el flag si explícitamente completeProfile === true
+
     if (user.completeProfile === true) {
       this.setIncompleteProfileFlag(false);
     }
@@ -225,7 +221,6 @@ export class AuthService {
     );
   }
 
-  /** Completa el perfil del miembro autenticado (flujo Google). */
   completeProfile(data: {
     phone: string;
     documentId: string;

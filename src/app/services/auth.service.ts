@@ -6,6 +6,7 @@ import {
   of,
   throwError,
   ReplaySubject,
+  timer,
 } from 'rxjs';
 import { tap, catchError, finalize, share } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
@@ -41,9 +42,16 @@ export class AuthService {
   private readonly API_URL = environment.apiUrl;
   private readonly USER_KEY = environment.userKey;
 
+  private readonly SESSION_CHECK_COOLDOWN = 30000;
+  private lastSessionCheck: number = 0;
   private sessionCheckInProgress = false;
-
   private sessionCheckObs: Observable<any> | null = null;
+
+  private initialSessionCheckCompleted = false;
+  private isInitializing = false;
+
+  private sessionVerificationSubject = new ReplaySubject<any>(1);
+  public sessionVerification$ = this.sessionVerificationSubject.asObservable();
 
   private authStateSubject = new BehaviorSubject<boolean>(false);
   public authState$ = this.authStateSubject.asObservable();
@@ -52,6 +60,52 @@ export class AuthService {
   public currentUser$ = this.currentUserSubject.asObservable();
   constructor(private http: HttpClient) {
     this.loadUserFromLocalStorage();
+    this.lastSessionCheck = Date.now();
+  }
+
+  initializeSession(): Observable<any> {
+    if (this.initialSessionCheckCompleted) {
+      const currentUser = this.currentUserSubject.getValue();
+      return of(currentUser);
+    }
+
+    if (this.isInitializing && this.sessionCheckObs) {
+      return this.sessionCheckObs;
+    }
+
+    this.isInitializing = true;
+
+    const currentUser = this.currentUserSubject.getValue();
+    if (currentUser && currentUser.id && currentUser.name) {
+      this.initialSessionCheckCompleted = true;
+      this.isInitializing = false;
+      this.sessionVerificationSubject.next(currentUser);
+      return of(currentUser);
+    }
+
+    return this.checkSession().pipe(
+      tap((user) => {
+        if (user && user.name && user.id) {
+          localStorage.setItem(this.USER_KEY, JSON.stringify(user));
+          this.setCurrentUser(user);
+          this.sessionVerificationSubject.next(user);
+        }
+        this.initialSessionCheckCompleted = true;
+        this.lastSessionCheck = Date.now();
+      }),
+      catchError((err) => {
+        if (err.status === 401 || err.status === 403) {
+          this.clearUserData();
+          this.sessionVerificationSubject.next(null);
+        }
+        this.initialSessionCheckCompleted = true;
+        return throwError(() => err);
+      }),
+      finalize(() => {
+        this.isInitializing = false;
+      }),
+      share()
+    );
   }
 
   private incompleteProfileFlagKey = 'incomplete_profile_flag';
@@ -67,29 +121,73 @@ export class AuthService {
   hasIncompleteProfileFlag(): boolean {
     return localStorage.getItem(this.incompleteProfileFlagKey) === 'true';
   }
-  verifySessionWithBackend(): void {
-    if (this.sessionCheckInProgress) return;
+
+  verifySessionWithBackend(): Observable<any> {
+    const now = Date.now();
+
+    if (this.sessionCheckInProgress && this.sessionCheckObs) {
+      return this.sessionCheckObs;
+    }
+
+    if (now - this.lastSessionCheck < this.SESSION_CHECK_COOLDOWN) {
+      const currentUser = this.currentUserSubject.getValue();
+      if (currentUser) {
+        return of(currentUser);
+      }
+    }
 
     this.sessionCheckInProgress = true;
+    this.lastSessionCheck = now;
 
-    this.checkSession().subscribe({
-      next: (user) => {
+    this.sessionCheckObs = this.checkSession().pipe(
+      tap((user) => {
         if (user && user.name && user.id) {
           localStorage.setItem(this.USER_KEY, JSON.stringify(user));
           this.setCurrentUser(user);
+          this.sessionVerificationSubject.next(user);
         }
-      },
-      error: (err) => {
+      }),
+      catchError((err) => {
         if (err.status === 401 || err.status === 403) {
           this.clearUserData();
+          this.sessionVerificationSubject.next(null);
         }
-      },
-      complete: () => {
+        return throwError(() => err);
+      }),
+      finalize(() => {
         this.sessionCheckInProgress = false;
         this.sessionCheckObs = null;
-      },
-    });
+      }),
+      share()
+    );
+
+    return this.sessionCheckObs;
   }
+
+  verifySessionIfNeeded(): Observable<any> {
+    if (!this.initialSessionCheckCompleted) {
+      return this.initializeSession();
+    }
+
+    const currentUser = this.currentUserSubject.getValue();
+    const now = Date.now();
+
+    if (
+      currentUser &&
+      now - this.lastSessionCheck < this.SESSION_CHECK_COOLDOWN
+    ) {
+      return of(currentUser);
+    }
+
+    return this.verifySessionWithBackend();
+  }
+
+  forceSessionVerification(): Observable<any> {
+    this.lastSessionCheck = 0;
+    this.initialSessionCheckCompleted = false;
+    return this.verifySessionWithBackend();
+  }
+
   private loadUserFromLocalStorage(): void {
     try {
       const storedUser = localStorage.getItem(this.USER_KEY);
@@ -113,6 +211,7 @@ export class AuthService {
           if (user && user.id) {
             localStorage.setItem(this.USER_KEY, JSON.stringify(user));
             this.setCurrentUser(user);
+            this.lastSessionCheck = Date.now();
           }
         })
       );
@@ -126,6 +225,8 @@ export class AuthService {
           if (user && user.id) {
             localStorage.setItem(this.USER_KEY, JSON.stringify(user));
             this.setCurrentUser(user);
+
+            this.lastSessionCheck = Date.now();
           }
         }),
         catchError((error) => {
@@ -156,7 +257,7 @@ export class AuthService {
 
     this.sessionCheckObs = this.http.get<any>(`${this.API_URL}/auth/me`).pipe(
       tap((resp) => {
-        const user = resp?.user || resp; // backend devuelve { user: {...} }
+        const user = resp?.user || resp;
         if (user && user.name && user.id) {
           localStorage.setItem(this.USER_KEY, JSON.stringify(user));
           this.setCurrentUser(user);
@@ -169,7 +270,6 @@ export class AuthService {
         return throwError(() => error);
       }),
       finalize(() => {
-        this.sessionCheckInProgress = false;
         this.sessionCheckObs = null;
       }),
       share()
@@ -207,6 +307,10 @@ export class AuthService {
     localStorage.removeItem(this.USER_KEY);
     this.currentUserSubject.next(null);
     this.authStateSubject.next(false);
+
+    this.lastSessionCheck = 0;
+    this.initialSessionCheckCompleted = false;
+    this.sessionVerificationSubject.next(null);
   }
 
   logout(): Observable<any> {
@@ -234,6 +338,7 @@ export class AuthService {
             localStorage.setItem(this.USER_KEY, JSON.stringify(resp.user));
             this.setCurrentUser(resp.user);
             this.setIncompleteProfileFlag(false);
+            this.lastSessionCheck = Date.now();
           }
         })
       );

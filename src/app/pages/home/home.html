@@ -1,6 +1,6 @@
 <main class="gym-home loaded">
-  <!-- Hero Section (sin animaciones) -->
-  <section class="hero-section">
+
+  <section id="inicio" class="hero-section">
     <div class="overlay"></div>
     <div class="hero-content">
       <h1 class="hero-title">TRANSFORMA TU <span class="highlight">CUERPO</span><br>TRANSFORMA TU <span
@@ -16,7 +16,7 @@
       <i class="fas fa-chevron-down"></i>
     </div>
   </section> <!-- Stats Section -->
-  <section class="stats-section">
+  <section  class="stats-section">
     <div class="container">
       <div class="stats-grid">
         <div class="stat-item scroll-animation fade-in-up" *ngFor="let stat of stats; let i = index" appScrollAnimation
@@ -31,7 +31,7 @@
     </div>
   </section>
   <!-- About Section -->
-  <section class="about-section">
+  <section id="acerca" class="about-section">
     <div class="container">
       <div class="about-content">
         <div class="about-text scroll-animation slide-in-left" appScrollAnimation [animationClass]="'animate'">
@@ -58,7 +58,7 @@
       </div>
     </div>
   </section> <!-- Classes Section -->
-  <section class="classes-section">
+  <section id="clases" class="classes-section">
     <div class="container">
       <h2 class="section-title scroll-animation fade-in-up" appScrollAnimation [animationClass]="'animate'">
         NUESTRAS <span class="highlight">CLASES</span>
@@ -90,6 +90,31 @@
     </div>
   </section>
 
+  <section id="horarios" class="schedule-section">
+    <div class="container">
+      <h2 class="section-title">
+        NUESTROS <span class="highlight">HORARIOS</span>
+      </h2>
+      <p class="section-subtitle">
+        Horarios flexibles que se adaptan a tu estilo de vida
+      </p>
+      <div class="schedule-info">
+        <div class="schedule-item">
+          <h3>Lunes - Viernes</h3>
+          <p>6:00 AM - 10:00 PM</p>
+        </div>
+        <div class="schedule-item">
+          <h3>Sábados</h3>
+          <p>7:00 AM - 8:00 PM</p>
+        </div>
+        <div class="schedule-item">
+          <h3>Domingos</h3>
+          <p>8:00 AM - 6:00 PM</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- Call to Action Banner -->
   <section class="cta-section">
     <div class="container">
@@ -100,7 +125,7 @@
       </div>
     </div>
   </section> <!-- Trainers Section -->
-  <section class="trainers-section">
+  <section id="entrenadores" class="trainers-section">
     <div class="container">
       <h2 class="section-title scroll-animation fade-in-up" appScrollAnimation [animationClass]="'animate'">
         NUESTROS <span class="highlight">ENTRENADORES</span>
@@ -158,7 +183,7 @@
     </div>
   </section>
   <!-- Membership Section -->
-  <section class="membership-section">
+  <section id="planes" class="membership-section">
     <div class="container">
       <h2 class="section-title scroll-animation fade-in-up" appScrollAnimation [animationClass]="'animate'">
         PLANES DE <span class="highlight">MEMBRESÍA</span>
@@ -240,6 +265,44 @@
           </div>
           <div class="plan-footer">
             <a href="#" class="plan-btn">SELECCIONAR</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Schedule Section -->
+
+
+  <!-- Contact Section -->
+  <section id="contacto" class="contact-section">
+    <div class="container">
+      <h2 class="section-title">
+        <span class="highlight">CONTACTO</span>
+      </h2>
+      <p class="section-subtitle">
+        Estamos aquí para ayudarte a alcanzar tus objetivos
+      </p>
+      <div class="contact-info">
+        <div class="contact-item">
+          <i class="fas fa-map-marker-alt"></i>
+          <div>
+            <h3>Dirección</h3>
+            <p>Calle Fitness 123, Ciudad Deportiva</p>
+          </div>
+        </div>
+        <div class="contact-item">
+          <i class="fas fa-phone"></i>
+          <div>
+            <h3>Teléfono</h3>
+            <p>+34 912 345 678</p>
+          </div>
+        </div>
+        <div class="contact-item">
+          <i class="fas fa-envelope"></i>
+          <div>
+            <h3>Email</h3>
+            <p>infopowerfitgym.com</p>
           </div>
         </div>
       </div>

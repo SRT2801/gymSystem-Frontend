@@ -1010,3 +1010,90 @@ $transition: all 0.3s ease;
     align-items: center;
   }
 }
+
+// Schedule Section
+.schedule-section {
+  background-color: $light-color;
+  @include section-padding;
+
+  .schedule-info {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+    margin-top: 1rem;
+  }
+
+  .schedule-item {
+    text-align: center;
+    padding: 2rem;
+    background-color: white;
+    border-radius: $border-radius;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    transition: $transition;
+
+    &:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+    }
+
+    h3 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: $primary-color;
+      margin-bottom: 1rem;
+    }
+
+    p {
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: $text-color;
+    }
+  }
+}
+
+// Contact Section
+.contact-section {
+  @include section-padding;
+
+  .contact-info {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    margin-top: 3rem;
+  }
+
+  .contact-item {
+    display: flex;
+    align-items: center;
+    padding: 2rem;
+    background-color: white;
+    border-radius: $border-radius;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    transition: $transition;
+
+    &:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+    }
+
+    i {
+      font-size: 2rem;
+      color: $primary-color;
+      margin-right: 1.5rem;
+      min-width: 50px;
+    }
+
+    h3 {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: $text-color;
+      margin-bottom: 0.5rem;
+    }
+
+    p {
+      font-size: 1rem;
+      color: $gray-color;
+      margin: 0;
+    }
+  }
+}

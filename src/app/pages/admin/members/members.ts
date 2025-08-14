@@ -381,4 +381,9 @@ export class MembersComponent implements OnInit {
       });
     }
   }
+
+  onImageError(event: any): void {
+    // Ocultar la imagen y mostrar el ícono por defecto
+    event.target.style.display = 'none';
+  }
 }

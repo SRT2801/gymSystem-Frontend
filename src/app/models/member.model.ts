@@ -8,6 +8,7 @@ export interface Member {
   registrationDate: string;
   active: boolean;
   hasAccount: boolean;
+  profilePicture: string;
 }
 
 export interface MemberResponse {

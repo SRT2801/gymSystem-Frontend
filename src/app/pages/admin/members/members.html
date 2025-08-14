@@ -77,7 +77,11 @@
   <app-modal [isOpen]="isEditModalOpen" [title]="'Editar Miembro'" [size]="'md'" (closeModal)="closeEditModal()">
     <div *ngIf="selectedMember" class="member-summary">
       <div class="member-avatar">
-        <i class="fas fa-user-circle"></i>
+        <img *ngIf="selectedMember.profilePicture; else defaultAvatar" [src]="selectedMember.profilePicture"
+          [alt]="selectedMember.name" class="profile-image" (error)="onImageError($event)" />
+        <ng-template #defaultAvatar>
+          <i class="fas fa-user-circle"></i>
+        </ng-template>
         <span class="status-dot" [ngClass]="{'active': selectedMember.active}"></span>
       </div>
       <div class="member-info">

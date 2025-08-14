@@ -22,6 +22,7 @@ export class MemberService {
       name?: string;
       email?: string;
       documentId?: string;
+      profilePicture?: string;
       hasAccount?: boolean;
       registrationDateFrom?: string;
       registrationDateTo?: string;
@@ -60,7 +61,9 @@ export class MemberService {
     if (searchParams.registrationDateTo) {
       url += `&registrationDateTo=${searchParams.registrationDateTo}`;
     }
-
+    if (searchParams.profilePicture) {
+      url += `&profilePicture=${encodeURIComponent(searchParams.profilePicture)}`;
+    }
     return this.http.get<MemberResponse>(url);
   }
 

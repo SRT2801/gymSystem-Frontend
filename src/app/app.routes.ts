@@ -11,7 +11,7 @@ import { PublicLayoutComponent } from './layouts/public-layout/public-layout';
 export const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
 
-  {
+  { 
     path: '',
     component: PublicLayoutComponent,
     children: [

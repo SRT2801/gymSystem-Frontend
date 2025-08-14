@@ -95,7 +95,7 @@ export class Home {
       name: 'Carlos Gómez',
       specialty: 'Entrenador de CrossFit',
       image:
-        'https://images.unsplash.com/photo-1594381898411-846e7d193883?auto=format&fit=crop&w=800',
+        'https://images.unsplash.com/photo-1600881333165-1c06e53eeae2?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
     },
     {
       name: 'Laura Martínez',
@@ -107,13 +107,13 @@ export class Home {
       name: 'Miguel Ángel',
       specialty: 'Nutricionista Deportivo',
       image:
-        'https://images.unsplash.com/photo-1648737966832-042ef51aec9e?auto=format&fit=crop&w=800',
+        'https://images.unsplash.com/photo-1606889463862-a8fc57a706ce?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
     },
     {
       name: 'Ana Torres',
       specialty: 'Entrenadora Personal',
       image:
-        'https://images.unsplash.com/photo-1609899537878-88d5ba429bbb?auto=format&fit=crop&w=800',
+        'https://images.unsplash.com/photo-1594381898411-846e7d193883?auto=format&fit=crop&w=800',
     },
   ];
 }

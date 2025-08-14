@@ -9,6 +9,7 @@ import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
+import { environment } from '../../../environments/environment';
 import { Boton } from '../../components/boton/boton';
 
 @Component({
@@ -22,6 +23,7 @@ export class Login implements AfterViewInit {
   loginForm: FormGroup;
   isLoading: boolean = false;
   loginError: string | null = null;
+  googleAuthLoading: boolean = false;
 
   constructor(
     private fb: FormBuilder,
@@ -36,6 +38,15 @@ export class Login implements AfterViewInit {
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required]],
     });
+  }
+  onGoogleLogin() {
+    this.googleAuthLoading = true;
+    // Limpiamos errores anteriores
+    this.loginError = null;
+    // La autenticación con Google se maneja mediante redirección a la API backend.
+    // environment.apiUrl = http://localhost:3000/api -> queremos http://localhost:3000/api/auth/google
+    const googleUrl = `${environment.apiUrl}/auth/google`;
+    window.location.href = googleUrl;
   }
 
   onSubmit() {
@@ -123,7 +134,9 @@ export class Login implements AfterViewInit {
       animateWithDelay('.slide-in-right', 600);
       animateWithDelay('.form-options', 800);
       animateWithDelay('.form-submit', 1000);
-      animateWithDelay('.additional-links', 1200);
+      animateWithDelay('.oauth-separator', 1100);
+      animateWithDelay('.google-login', 1200);
+      animateWithDelay('.additional-links', 1300);
       animateWithDelay('.login-footer', 1400);
     }, 100);
   }

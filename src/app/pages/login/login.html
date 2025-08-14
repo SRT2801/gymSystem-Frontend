@@ -39,7 +39,7 @@
           </div>
         </div>
 
-        
+
         <div class="form-options">
           <div class="remember-me">
             <input type="checkbox" id="remember">
@@ -54,6 +54,21 @@
         <div class="form-submit full-width">
           <app-boton texto="INICIAR SESIÓN" tipo="gym" size="large" [fullWidth]="true" [disabled]="loginForm.invalid"
             [isLoading]="isLoading" (buttonClick)="onSubmit()">
+          </app-boton>
+        </div>
+        <div class="oauth-separator full-width">
+          <span>o</span>
+        </div>
+        <div class="google-login full-width">
+          <app-boton 
+            [texto]="googleAuthLoading ? 'Redirigiendo...' : 'Iniciar sesión con Google'" 
+            tipo="google" 
+            size="large" 
+            [fullWidth]="true" 
+            [disabled]="googleAuthLoading"
+            [isLoading]="googleAuthLoading"
+            imagen="/assets/google.svg"
+            (buttonClick)="onGoogleLogin()">
           </app-boton>
         </div>
         <div class="additional-links full-width">
